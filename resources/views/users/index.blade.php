@@ -9,6 +9,7 @@
 </head>
 <body>
     <h1>Usuarios</h1>
+    <a href="/users/create"><button>Crear usuario</button></a>
     <table border="1">
         <thead>
         <tr>

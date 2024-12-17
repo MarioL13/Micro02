@@ -10,5 +10,6 @@
 <body>
     <h1>Pagina principal</h1>
     <a href="users">Ver usuarios</a>
+    <a href="projects">Ver projectos</a>
 </body>
 </html>
