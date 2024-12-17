@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::resource('users', UserController::class);
+Route::resource('projects', UserController::class);
