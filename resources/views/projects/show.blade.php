@@ -11,9 +11,9 @@
 <h1>Detalles de {{$project->title}}</h1>
 <ul>
     <li><strong>Titulo: </strong>{{$project->title}}</li>
-    <li><strong>Fecha Limite: </strong>{{$project->date_limit}}</li>
-    <li><strong>Nota: </strong>{{$project->note}}</li>
-    <li><strong>Descripcion: </strong>{{$project->desc}}</li>
+    <li><strong>Descripcion: </strong>{{$project->description}}</li>
+    <li><strong>Fecha Creación: </strong>{{$project->creation_date}}</li>
+    <li><strong>Fecha Límite: </strong>{{$project->limit_date}}</li>
 </ul>
 <a href="/">Volver</a>
 </body>

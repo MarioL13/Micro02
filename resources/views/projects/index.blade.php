@@ -22,9 +22,9 @@
     @foreach($projects as $project)
         <tr>
             <td>{{$project->title}}</td>
-            <td>{{$project->date_limit}}</td>
-            <td>{{$project->note}}</td>
-            <td>{{$project->desc}}</td>
+            <td>{{$project->description}}</td>
+            <td>{{$project->creation_date}}</td>
+            <td>{{$project->limit_date}}</td>
             <td>
                 <a href="/projects/{{ $project->id_project}}">Ver Detalles</a>
             </td>
