@@ -22,35 +22,45 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'surname' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'repeat' => 'required|min:6|same:password',
-            'birtdate' => 'required|date',
+            'password' => 'required|min:6|same:password_confirmation',
+            'password_confirmation' => 'required',
+            'birthdate' => 'required|date',
             'dni' => 'required|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('photos', 'public');
-        }else{
-            $fotoPath = null;
+        try{
+            if ($request->hasFile('foto')) {
+                $fotoPath = $request->file('foto')->store('photos', 'public');
+            }else{
+                $fotoPath = null;
+            }
+
+            $user = new User();
+            $user->name = $validatedData['name'];
+            $user->surname = $validatedData['surname'];
+            $user->email = $validatedData['email'];
+            $user->password = bcrypt($validatedData['password']);
+            $user->birthdate = $validatedData['birthdate'];
+            $user->dni = $validatedData['dni'];
+            $user->image = $fotoPath;
+            $user->creation_date = date('Y-m-d');
+            $user->state = 1;
+            $user->is_profesor = 0;
+            $user->save();
+
+            return redirect()->route('users.show', $user->id_user)->with('success', 'Usuario creado correctamente.');
+
+        }catch(\Exception $e){
+            return back()
+                ->withErrors(['error' => 'Hubo un error al intentar guardar el usuario: ' . $e->getMessage()])
+                ->withInput();
         }
-
-        $user = new User();
-        $user->name = $validatedData['name'];
-        $user->surname = $validatedData['surname'];
-        $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
-        $user->birthdate = $validatedData['birthdate'];
-        $user->dni = $validatedData['dni'];
-        $user->foto = $fotoPath;
-        $user->save();
-
-        return redirect()->route('users.show', $user->id_user)->with('success', 'Usuario creado correctamente.');
-
     }
 
     public function create(){

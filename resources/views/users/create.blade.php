@@ -23,7 +23,7 @@
     <input type="password" name="password" id="password" required>
 
     <label for="repeat">Repeteix la Contrasenya:</label>
-    <input type="password" name="repeat" id="repeat" required>
+    <input type="password" name="password_confirmation" id="repeat" required>
 
     <label for="birthdate">Naixement:</label>
     <input type="date" name="birthdate" id="birthdate" required>
@@ -36,5 +36,14 @@
 
     <input type="submit" name="crear" id="crear" value="Crear Usuario">
 </form>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 </body>
 </html>
