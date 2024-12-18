@@ -17,7 +17,7 @@
         <li><strong>DNI: </strong>{{$user->dni}}</li>
         <li><strong>Fecha de Creacion: </strong>{{$user->creation_date}}</li>
     </ul>
-    <img src="{{$user->foto}}" alt="">
+    <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
     <a href="/">Volver</a>
 </body>
 </html>

@@ -10,3 +10,4 @@ Route::get('/', function () {
 
 Route::resource('users', UserController::class);
 Route::resource('projects', ProjectController::class);
+Route::patch('/user/{id}/state', [UserController::class, 'cambiarEstado']);

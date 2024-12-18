@@ -92,4 +92,16 @@ class UserController extends Controller
     {
         //
     }
+
+    public function cambiarEstado(string $id){
+        $user = User::findorfail($id);
+
+        if ($user->state == 1){
+            $user->state = 0;
+        }else{
+            $user->state = 1;
+        }
+        $user->save();
+        return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado'); 
+    }
 }
