@@ -90,7 +90,11 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findorfail($id);
+
+        $user->delete();
+
+        return redirect()->route('users.index');
     }
 
     public function cambiarEstado(string $id){
@@ -102,6 +106,6 @@ class UserController extends Controller
             $user->state = 1;
         }
         $user->save();
-        return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado'); 
+        return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado');
     }
 }

@@ -72,11 +72,19 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->dni}}</td>
                 <td>
-                    <a href="/users/{{ $user->id_user}}">Ver Detalles</a>
+                    <a href="/users/{{ $user->id_user }}">Ver Detalles</a>
+
+                    <!-- Formulario para activar el usuario -->
                     <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
                         @csrf
                         @method('PATCH')
                         <button type="submit">Activar</button>
+                    </form>
+
+                    <form action="/users/{{ $user->id_user }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit")">Eliminar</button>
                     </form>
                 </td>
             </tr>
