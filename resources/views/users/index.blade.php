@@ -35,8 +35,7 @@
                 <td>{{$user->dni}}</td>
                 <td>
                     <a href="/users/{{ $user->id_user}}">Ver Detalles</a>
-
-                    <!-- Formulario para desactivar el usuario -->
+                    <a href="/users/{{ $user->id_user}}/edit">Editar</a>
                     <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
                         @csrf
                         @method('PATCH')
@@ -84,7 +83,7 @@
                     <form action="/users/{{ $user->id_user }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit")">Eliminar</button>
+                        <button type="submit")>Eliminar</button>
                     </form>
                 </td>
             </tr>

@@ -77,6 +77,13 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('users.edit', compact('user'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
