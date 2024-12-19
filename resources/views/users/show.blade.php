@@ -18,6 +18,6 @@
         <li><strong>Fecha de Creacion: </strong>{{$user->creation_date}}</li>
     </ul>
     <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
-    <a href="/">Volver</a>
+    <a href="/users">Volver</a>
 </body>
 </html>
