@@ -8,6 +8,8 @@
     <title>Crear Usuario</title>
 </head>
 <body>
+<h1>Crear Usuario</h1>
+<a href="{{ route('users.index') }}">Volver</a>
 <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <label for="name">Nom:</label>

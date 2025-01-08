@@ -8,9 +8,16 @@
     <title>Main</title>
 </head>
 <body>
-    <h1>Pagina principal</h1>
-    <a href="users">Ver usuarios</a>
+    <h1>Pagina principal </h1>
+    @if(auth()->user()->is_profesor)
+        <a href="users">Ver usuarios</a>
+        <a href="items">Ver Items</a>
+    @endif
     <a href="projects">Ver projectos</a>
-    <a href="items">Ver Items</a>
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit">Cerrar sesión</button>
+    </form>
 </body>
 </html>

@@ -9,6 +9,7 @@
 </head>
 <body>
     <h1>Detalles de {{$user->name}} {{$user->surname}}</h1>
+    <a href="{{ route('users.index') }}">Volver</a>
     <ul>
         <li><strong>Nombre: </strong>{{$user->name}}</li>
         <li><strong>Apellido: </strong>{{$user->surname}}</li>

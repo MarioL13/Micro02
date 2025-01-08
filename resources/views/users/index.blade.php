@@ -9,6 +9,8 @@
 </head>
 <body>
 <h1>Usuarios</h1>
+<a href="{{ route('welcome') }}">Volver</a>
+
 <a href="/users/create"><button>Crear usuario</button></a>
 
 <!-- Tabla de usuarios activos -->
@@ -26,7 +28,7 @@
     </thead>
     <tbody>
     @foreach($users as $user)
-        @if($user->state == 1)
+        @if($user->state == 1 && $user->is_profesor != 1)
             <tr>
                 <td><img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}"></td>
                 <td>{{$user->name}}</td>
@@ -63,7 +65,7 @@
     </thead>
     <tbody>
     @foreach($users as $user)
-        @if($user->state == 0)
+        @if($user->state == 0 && $user->is_profesor != 1)
             <tr>
                 <td><img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}"></td>
                 <td>{{$user->name}}</td>

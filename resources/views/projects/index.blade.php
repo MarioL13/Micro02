@@ -13,9 +13,11 @@
     <thead>
     <tr>
         <th>Titulo</th>
-        <th>Fecha Limite</th>
-        <th>Nota</th>
         <th>Descripción</th>
+        <th>Fecha de creacion</th>
+        <th>Fecha Limite</th>
+        <th>Acciones</th>
+        <th>Nota</th>
     </tr>
     </thead>
     <tbody>
