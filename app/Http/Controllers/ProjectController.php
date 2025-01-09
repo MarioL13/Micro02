@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(){
+
         $projects = Project::all();
+
 
         return view('projects.index', compact('projects'));
     }
@@ -47,5 +49,13 @@ class ProjectController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function create(){
+        if (Auth::check() && Auth::user()->is_profesor) {
+            return view('projects.create');
+        }
+
+        abort(404);
     }
 }

@@ -9,6 +9,9 @@
 </head>
 <body>
 <h1>Proyectos</h1>
+@if(auth()->user()->is_profesor)
+    <a href="/projects/create"><button>Crear usuario</button></a>
+@endif
 <table border="1">
     <thead>
     <tr>
@@ -17,7 +20,9 @@
         <th>Fecha de creacion</th>
         <th>Fecha Limite</th>
         <th>Acciones</th>
+        @if(auth()->user()->is_profesor!=1)
         <th>Nota</th>
+        @endif
     </tr>
     </thead>
     <tbody>
