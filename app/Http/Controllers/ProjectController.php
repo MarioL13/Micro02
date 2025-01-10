@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
 
         $projects = Project::all();
 
@@ -24,7 +26,27 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required|max:255',
+            'limit_date' => 'required|date'
+        ]);
+
+        try {
+            $project = new Project();
+            $project->title = $validatedData['title'];
+            $project->description = $validatedData['description'];
+            $project->limit_date = $validatedData['limit_date'];
+            $project->creation_date = now();
+            $project->save();
+
+            return redirect()->route('projects.show', $project->id_project)->with('success', 'Proyecto creado correctamente.');
+
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors(['error' => 'Hubo un error al intentar guardar el proyecto: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 
     /**
@@ -32,7 +54,8 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $project = Project::findOrFail($id);
+        return view('projects.show', compact('project'));
     }
 
     /**
@@ -48,14 +71,38 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $project = Project::findorfail($id);
+
+        $project->delete();
+
+        return redirect()->route('projects.index');
     }
 
-    public function create(){
+    public function create()
+    {
         if (Auth::check() && Auth::user()->is_profesor) {
             return view('projects.create');
         }
 
         abort(404);
     }
+
+    public function alumnos($id)
+    {
+        $project = Project::findOrFail($id);
+        $users = User::where('is_profesor', '0')->get();
+        $assignedUsers = $project->users->pluck('id_user')->toArray();
+
+        return view('projects.veralumnos', compact('project', 'users', 'assignedUsers'));
+    }
+
+    public function assignStudents(Request $request, $id)
+    {
+        $project = Project::findOrFail($id);
+        $project->users()->sync($request->input('students', []));
+        return redirect()->route('projects.index')->with('success', 'Proyecto creado correctamente.');
+    }
+
+
+
 }

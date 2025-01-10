@@ -29,4 +29,10 @@ class User extends Authenticatable
         'is_profesor',
         'image',
         'creation_date'];
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'user_projects', 'id_user', 'id_project');
+    }
+
 }

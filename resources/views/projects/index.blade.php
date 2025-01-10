@@ -10,7 +10,7 @@
 <body>
 <h1>Proyectos</h1>
 @if(auth()->user()->is_profesor)
-    <a href="/projects/create"><button>Crear usuario</button></a>
+    <a href="/projects/create"><button>Crear projecte</button></a>
 @endif
 <table border="1">
     <thead>
@@ -34,6 +34,12 @@
             <td>{{$project->limit_date}}</td>
             <td>
                 <a href="/projects/{{ $project->id_project}}">Ver Detalles</a>
+                <form action="/projects/{{ $project->id_project }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit")>Eliminar</button>
+                </form>
+                <a href="/project/{{ $project->id_project }}/veralumnos">Asignar Alumnos</a>
             </td>
         </tr>
     @endforeach
