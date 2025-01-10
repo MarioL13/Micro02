@@ -40,6 +40,7 @@
                     <button type="submit")>Eliminar</button>
                 </form>
                 <a href="/project/{{ $project->id_project }}/veralumnos">Asignar Alumnos</a>
+                <a href="/project/{{ $project->id_project }}/edit">Editar usuarios</a>
             </td>
         </tr>
     @endforeach

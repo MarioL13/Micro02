@@ -14,9 +14,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
-
-        $projects = Project::all();
-
+        if(Auth::user()->is_profesor = 0){
+            $projects = Auth::user()->projects;
+        }else{
+            $projects = Project::all();
+        }
 
         return view('projects.index', compact('projects'));
     }
@@ -54,7 +56,7 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::with('users')->findOrFail($id);
         return view('projects.show', compact('project'));
     }
 
