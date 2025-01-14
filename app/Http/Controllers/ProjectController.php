@@ -65,7 +65,26 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required|max:255',
+            'limit_date' => 'required|date'
+        ]);
+
+        try {
+            $project = Project::findOrFail($id);
+
+            $project->title = $validatedData['title'];
+            $project->description = $validatedData['description'];
+            $project->limit_date = $validatedData['limit_date'];
+            $project->save();
+
+            return redirect()->route('projects.show', $project->id_project)->with('success', 'Project actualizado correctamente.');
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors(['error' => 'Hubo un error al intentar actualizar el project: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 
     /**
@@ -105,6 +124,14 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Proyecto creado correctamente.');
     }
 
+    public function edit($id)
+    {
+        if (Auth::check() && Auth::user()->is_profesor) {
+            $project = Project::findOrFail($id);
+            return view('projects.edit', compact('project'));
+        }
 
+        abort(404);
+    }
 
 }
