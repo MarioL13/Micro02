@@ -14,7 +14,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->is_profesor = 0){
+        if(Auth::user()->is_profesor == 0){
             $projects = Auth::user()->projects;
         }else{
             $projects = Project::all();

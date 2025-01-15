@@ -12,6 +12,7 @@
 @if(auth()->user()->is_profesor)
     <a href="/projects/create"><button>Crear projecte</button></a>
 @endif
+<a href="/"><button>Volver</button></a>
 <table border="1">
     <thead>
     <tr>
@@ -20,7 +21,7 @@
         <th>Fecha de creacion</th>
         <th>Fecha Limite</th>
         <th>Acciones</th>
-        @if(auth()->user()->is_profesor!=1)
+        @if(auth()->user()->is_profesor == false)
         <th>Nota</th>
         @endif
     </tr>
@@ -33,14 +34,14 @@
             <td>{{$project->creation_date}}</td>
             <td>{{$project->limit_date}}</td>
             <td>
-                <a href="/projects/{{ $project->id_project}}">Ver Detalles</a>
+                <button><a href="/projects/{{ $project->id_project}}">Ver Detalles</a></button>
                 <form action="/projects/{{ $project->id_project }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit")>Eliminar</button>
                 </form>
-                <a href="/project/{{ $project->id_project }}/veralumnos">Asignar Alumnos</a>
-                <a href="/project/{{ $project->id_project }}/edit">Editar Proyecto</a>
+                <button><a href="/project/{{ $project->id_project }}/veralumnos">Asignar Alumnos</a></button>
+                <button><a href="/project/{{ $project->id_project }}/edit">Editar Proyecto</a></button>
             </td>
         </tr>
     @endforeach

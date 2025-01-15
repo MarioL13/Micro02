@@ -35,4 +35,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'user_projects', 'id_user', 'id_project');
     }
 
+    protected $casts = [
+        'is_profesor' => 'boolean',
+    ];
+
 }

@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>Usuarios</h1>
-<a href="{{ route('welcome') }}">Volver</a>
+<button><a href="{{ route('welcome') }}">Volver</a></button>
 
 <a href="/users/create"><button>Crear usuario</button></a>
 
@@ -36,8 +36,8 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->dni}}</td>
                 <td>
-                    <a href="/users/{{ $user->id_user}}">Ver Detalles</a>
-                    <a href="/users/{{ $user->id_user}}/edit">Editar</a>
+                    <button><a href="/users/{{ $user->id_user}}">Ver Detalles</a></button>
+                    <button><a href="/users/{{ $user->id_user}}/edit">Editar</a></button>
                     <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
                         @csrf
                         @method('PATCH')

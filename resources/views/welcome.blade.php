@@ -10,10 +10,10 @@
 <body>
     <h1>Pagina principal </h1>
     @if(auth()->user()->is_profesor)
-        <a href="users">Ver usuarios</a>
-        <a href="items">Ver Items</a>
+       <button><a href="users">Ver usuarios</a></button>
+        <button><a href="items">Ver Items</a></button>
     @endif
-    <a href="projects">Ver projectos</a>
+    <button><a href="projects">Ver projectos</a></button>
 
     <form action="{{ route('logout') }}" method="POST">
         @csrf
