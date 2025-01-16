@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>Proyectos</h1>
-<a href="/items/create"><button>Crear projecte</button></a>
+<a href="/items/create"><button>Crear Item</button></a>
 <table border="1">
     <thead>
     <tr>
@@ -20,7 +20,6 @@
     </tr>
     </thead>
     <tbody>
-    <a href="/items/create"><button>Crear Item</button></a>
     @foreach($items as $item)
         <tr>
             <td><img height="100px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}"></td>
@@ -28,7 +27,7 @@
             <td>{{$item->description}}</td>
             <td>
                 <button><a href="/items/{{ $item->id_item}}">Ver Detalles</a></button>
-                <a href="/items/{{ $item->id_item}}">Cambiar icono</a>
+                <button><a href="/items/{{ $item->id_item}}/edit">Editar Item</a></button>
                 <form action="/items/{{ $item->id_item }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')

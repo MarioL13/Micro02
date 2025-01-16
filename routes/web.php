@@ -18,8 +18,11 @@ Route::resource('projects', ProjectController::class)->middleware('auth');
 Route::get('/project/{id}/veralumnos', [ProjectController::class, 'alumnos'])->middleware('auth');
 Route::post('/project/{id}/assign-students', [ProjectController::class, 'assignStudents'])->middleware('auth');
 Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->middleware('auth');
+Route::get('/project/{id}/veritems', [ProjectController::class, 'items']);
+Route::post('/project/{id}/assign-items', [ProjectController::class, 'assignItems'])->middleware('auth');
 
 Route::resource('items', ItemController::class)->middleware('auth');
+Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

@@ -11,4 +11,9 @@ class Item extends Model
     protected $primaryKey = 'id_item';
 
     public $timestamps = false;
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_items', 'id_item', 'id_project');
+    }
 }

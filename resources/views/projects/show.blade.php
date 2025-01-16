@@ -18,9 +18,17 @@
 </ul>
 
 <h3>Usuarios asignados:</h3>
+<button><a href="/project/{{ $project->id_project }}/veralumnos">Asignar Alumnos</a></button>
 <ul>
     @foreach ($project->users as $user)
         <li>{{ $user->name }} ({{ $user->email }})</li>
+    @endforeach
+</ul>
+
+<button><a href="/project/{{ $project->id_project }}/veritems">Asignar Items</a></button>
+<ul>
+    @foreach ($project->items as $item)
+        <li><img height="25px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}">{{ $item->title }}</li>
     @endforeach
 </ul>
 

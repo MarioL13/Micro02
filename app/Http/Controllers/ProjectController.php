@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
@@ -121,7 +122,7 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
         $project->users()->sync($request->input('students', []));
-        return redirect()->route('projects.index')->with('success', 'Proyecto creado correctamente.');
+        return redirect()->route('projects.show', $project->id_project)->with('success', 'Alumnos asignados correctamente.');
     }
 
     public function edit($id)
@@ -133,5 +134,38 @@ class ProjectController extends Controller
 
         abort(404);
     }
+    public function items($id)
+    {
+        $project = Project::findOrFail($id);
+        $items = Item::all();
+        $assignedItems = $project->items->pluck('id_item')->toArray();
 
+        return view('projects.veritems', compact('project', 'items', 'assignedItems'));
+    }
+
+    public function assignItems(Request $request, $id)
+    {
+        $project = Project::findOrFail($id);
+        $items = $request->input('items', []);
+        $percentages = $request->input('percentages', []);
+
+        $syncData = [];
+
+        $totalPercentage = 0;
+        foreach ($items as $itemId) {
+            $totalPercentage += $percentages[$itemId] ?? 0;
+        }
+
+        if ($totalPercentage > 100) {
+            return back()->withInput()->with('error', 'La suma de los porcentajes no puede ser mayor a 100.');
+        }
+
+        foreach ($items as $itemId) {
+            $syncData[$itemId] = ['percentage' => $percentages[$itemId] ?? 0];
+        }
+
+        $project->items()->sync($syncData);
+
+        return redirect()->route('projects.show', $project->id_project)->with('success', 'Items asignados correctamente.');
+    }
 }

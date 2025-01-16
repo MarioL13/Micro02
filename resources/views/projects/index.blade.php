@@ -40,7 +40,6 @@
                     @method('DELETE')
                     <button type="submit")>Eliminar</button>
                 </form>
-                <button><a href="/project/{{ $project->id_project }}/veralumnos">Asignar Alumnos</a></button>
                 <button><a href="/project/{{ $project->id_project }}/edit">Editar Proyecto</a></button>
             </td>
         </tr>
