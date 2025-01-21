@@ -24,14 +24,14 @@
                 @if(auth()->user()->is_profesor == 0)
                     <li>
                         <i class='bx bxs-user'></i>
-                        <a href="#">Les meves dades</a>
+                        <a href="/users/{{ auth()->user()->id_user }}"><button class="stats-button" type="submit">Les meves dades</button></a>
                     </li>
                 @endif
                 <li>
                     <i class='bx bx-log-out'></i>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit">Cerrar sesión</button>
+                        <button class="stats-button" type="submit">Cerrar sesión</button></form>
                     </form>
                 </li>
             </ul>
@@ -44,6 +44,8 @@
             <h2>BENVINGUT</h2>
             @if(auth()->user()->is_profesor)
                 <button class="stats-button">Crear Projectes</button>
+                <div class="stats-button">Alumnes</div>
+                <div class="stats-button">Items</div>
             @endif
         </div>
 
@@ -55,22 +57,16 @@
                         <div class="activity">
                             {{$project->title}}
                             <a href="/project/{{ $project->id_project }}/edit"php ><button class="stats-button">Modificar</button></a>
-                            <form action="/projects/{{ $project->id_project }}" method="POST" class="stats-button">
+                            <form action="/projects/{{ $project->id_project }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit")>Eliminar</button>
+                                <button class="stats-button" type="submit")>Eliminar</button>
                             </form>
                         </div>
                     </a>
                 @endforeach
             </div>
         </div>
-        @if(auth()->user()->is_profesor)
-            <div class="evaluation-section">
-                <div class="evaluation-button">ALUMNES</div>
-                <div class="evaluation-button">ITEMS</div>
-            </div>
-        @endif
     </main>
 </div>
 </body>

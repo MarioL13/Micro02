@@ -80,10 +80,11 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        if (Auth::check() && Auth::user()->is_profesor) {
+        if (Auth::check() && Auth::user()->is_profesor || auth()->user()->id_user==$id) {
             $user = User::findOrFail($id);
             return view('users.show', compact('user'));
         }
+
 
         abort(404);
     }
