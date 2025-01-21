@@ -9,11 +9,12 @@
 </head>
 <body>
     <h1>Pagina principal </h1>
+
     @if(auth()->user()->is_profesor)
-       <button><a href="users">Ver usuarios</a></button>
-        <button><a href="items">Ver Items</a></button>
+       <button><a href="../users">Ver usuarios</a></button>
+        <button><a href="../items">Ver Items</a></button>
     @endif
-    <button><a href="projects">Ver projectos</a></button>
+    <button><a href="../projects">Ver projectos</a></button>
 
     <form action="{{ route('logout') }}" method="POST">
         @csrf

@@ -28,7 +28,7 @@
 <button><a href="/project/{{ $project->id_project }}/veritems">Asignar Items</a></button>
 <ul>
     @foreach ($project->items as $item)
-        <li><img height="25px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}">{{ $item->title }}</li>
+        <li><img height="25px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}">{{ $item->title }} - {{$item->percentage}}</li>
     @endforeach
 </ul>
 

@@ -24,15 +24,11 @@
         </div>
     @endforeach
     <button type="submit">Actualizar Asignaciones</button>
-    @if($errors->any())
-        <div>
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 </form>
+@if(session('error'))
+    <div>
+        <strong>{{ session('error') }}</strong>
+    </div>
+@endif
 </body>
 </html>

@@ -6,9 +6,12 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome')->middleware('auth');
+Route::get('/', [ProjectController::class, 'index'])->name('projects.index')->middleware('auth');
+
+
+Route::get('/welcome', function () {
+    return redirect()->route('projects.index');
+})->name('welcome');
 
 Route::resource('users', UserController::class)->middleware('auth');
 Route::patch('/user/{id}/state', [UserController::class, 'cambiarEstado'])->middleware('auth');
