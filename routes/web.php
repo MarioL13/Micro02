@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
@@ -31,3 +32,11 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+Route::get('/projects/{project}/activities/create', [ActivityController::class, 'create'])->name('activities.create');
+Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
+Route::get('/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
+Route::put('/activities/{activity}', [ActivityController::class, 'update'])->name('activities.update');
+Route::delete('/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+Route::get('/activities/{id}/items', [ActivityController::class, 'items'])->name('activities.items');
+Route::post('/activities/{id}/items', [ActivityController::class, 'assignItems'])->name('activities.assignItems');
+Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');

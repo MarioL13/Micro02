@@ -28,9 +28,42 @@
 <button><a href="/project/{{ $project->id_project }}/veritems">Asignar Items</a></button>
 <ul>
     @foreach ($project->items as $item)
-        <li><img height="25px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}">{{ $item->title }} - {{$item->percentage}}</li>
+        <li>
+            <img height="25px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->title }}">
+            {{ $item->title }} - {{ $item->pivot->percentage }}%
+        </li>
     @endforeach
 </ul>
+
+
+<h3>Actividades:</h3>
+<a href="{{ route('activities.create', $project->id_project) }}" class="btn btn-primary">Crear Actividad</a>
+<table class="table" border = "1px">
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach ($project->activities as $activity)
+        <tr>
+            <td>{{ $activity->title }}</td>
+            <td>{{ $activity->description }}</td>
+            <td>
+                <a href="{{ route('activities.show', $activity->id_activity) }}" class="btn btn-info">Ver</a>
+                <a href="{{ route('activities.edit', $activity->id_activity) }}" class="btn btn-warning">Editar</a>
+                <form action="{{ route('activities.destroy', $activity->id_activity) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta actividad?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+    @endforeach
+    </tbody>
+</table>
 
 </body>
 </html>

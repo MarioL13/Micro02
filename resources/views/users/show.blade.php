@@ -9,7 +9,11 @@
 </head>
 <body>
     <h1>Detalles de {{$user->name}} {{$user->surname}}</h1>
-    <a href="{{ route('users.index') }}">Volver</a>
+    @if(auth()->user()->is_profesor)
+        <a href="{{ route('users.index') }}">Volver</a>
+    @else
+        <a href="{{ route('welcome') }}">Volver</a>
+    @endif
     <ul>
         <li><strong>Nombre: </strong>{{$user->name}}</li>
         <li><strong>Apellido: </strong>{{$user->surname}}</li>
@@ -19,6 +23,5 @@
         <li><strong>Fecha de Creacion: </strong>{{$user->creation_date}}</li>
     </ul>
     <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
-    <a href="/users">Volver</a>
 </body>
 </html>

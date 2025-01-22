@@ -14,6 +14,7 @@ class Item extends Model
 
     public function projects()
     {
-        return $this->belongsToMany(Project::class, 'project_items', 'id_item', 'id_project');
+        return $this->belongsToMany(Project::class, 'project_items', 'id_item', 'id_project')
+            ->withPivot('percentage');
     }
 }

@@ -19,6 +19,12 @@ class project extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'project_items', 'id_project', 'id_item');
+        return $this->belongsToMany(Item::class, 'project_items', 'id_project', 'id_item')
+            ->withPivot('percentage');
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'id_project');
     }
 }

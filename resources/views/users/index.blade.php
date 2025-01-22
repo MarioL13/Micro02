@@ -36,6 +36,7 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->dni}}</td>
                 <td>
+
                     <button><a href="/users/{{ $user->id_user}}">Ver Detalles</a></button>
                     <button><a href="/users/{{ $user->id_user}}/edit">Editar</a></button>
                     <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
