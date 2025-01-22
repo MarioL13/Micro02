@@ -85,11 +85,12 @@ form .error-message {
 
 /* Main Content */
 .main-content {
-  margin-left: 18%;
-  padding: 20px;
-  width: 85%;
-  box-sizing: border-box;
+    margin-left: 18%;
+    padding: 20px;
+    width: 85%;
+    box-sizing: border-box;
 }
+
 
 .main-content h1 {
   font-size: 24px;
@@ -146,23 +147,45 @@ form .error-message {
   background-color: #608BC1;
 }
 
+.stats-button-edit{
+    background-color: #133E87;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
+.stats-button-edit:hover{
+    color: #133E87;
+    background-color: #CBDCEB;
+}
+
 /* Evaluation Items */
 .evaluation-items {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .evaluation-items .item {
-  width: 30px;
-  height: 30px;
-  background-color: #133E87;
-  border-radius: 50%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.evaluation-items .item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #133E87;
 }
 
 /* Activities Section */
 .activities {
-  margin-bottom: 30px;
   background-color:#608BC1;
   border-radius: 10px;
   padding: 25px;

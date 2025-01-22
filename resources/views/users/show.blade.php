@@ -14,24 +14,27 @@
 <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar">
-        <header class="header">
-            <div class="profile">
-                <div class="avatar"></div>
-                <p>Hola, {{ auth()->user()->name }}</p>
-            </div>
-            <div class="logo">
-                <img src="{{ asset('css/logo.png') }}" alt="Logo SXP StudyXP">
-            </div>
-        </header>
+        <div class="profile">
+            <div class="avatar"></div>
+            <p>Hola, {{auth()->user()->name}}</p>
+        </div>
+        <div class="logo">
+            <img src="{{asset('css/logo.png')}}" alt="StudyXP Logo">
+        </div>
         <nav class="bottom-menu">
             <ul>
-                <li>
-                    <i class='bx bxs-user'></i>
-                    <a href="#">Les meves dades</a>
-                </li>
+                @if(auth()->user()->is_profesor == 0)
+                    <li>
+                        <i class='bx bxs-user'></i>
+                        <a href="/users/{{ auth()->user()->id_user }}"><button class="stats-button" type="submit">Les meves dades</button></a>
+                    </li>
+                @endif
                 <li>
                     <i class='bx bx-log-out'></i>
-                    <a href="{{ route('logout') }}">Log Out</a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="stats-button" type="submit">Tancar sessió</button></form>
+                    </form>
                 </li>
             </ul>
         </nav>
@@ -59,9 +62,9 @@
             </div>
             <div class="save-button">
                 @if(auth()->user()->is_profesor)
-                    <a href="{{ route('users.index') }}" class="save-button">Tornar</a>
+                    <a href="{{ route('users.index') }}" ><button class="save-button">Tornar</button></a>
                 @else
-                    <a href="{{ route('welcome') }}" class="save-button">Tornar</a>
+                    <a href="{{ route('welcome') }}"><button class="save-button">Tornar</button></a>
                 @endif
             </div>
 

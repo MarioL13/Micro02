@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inici Professor - StudyXP</title>
+    <title>Inici - StudyXP</title>
     <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -31,7 +31,7 @@
                     <i class='bx bx-log-out'></i>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="stats-button" type="submit">Cerrar sesión</button></form>
+                        <button class="stats-button" type="submit">Tancar sessió</button></form>
                     </form>
                 </li>
             </ul>
@@ -54,14 +54,18 @@
             <div class="activities-list">
                 @foreach($projects as $project)
                     <a href="/projects/{{ $project->id_project}}" class="activity-link">
+
                         <div class="activity">
                             {{$project->title}}
-                            <a href="/project/{{ $project->id_project }}/edit"php ><button class="stats-button">Modificar</button></a>
-                            <form action="/projects/{{ $project->id_project }}" method="POST">
+                            @if(auth()->user()->is_profesor)
+                            <a href="/project/{{ $project->id_project }}/edit"><button class="stats-button">Modificar</button></a>
+
+                                <form action="/projects/{{ $project->id_project }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button class="stats-button" type="submit")>Eliminar</button>
                             </form>
+                            @endif
                         </div>
                     </a>
                 @endforeach
