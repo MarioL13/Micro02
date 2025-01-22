@@ -57,7 +57,7 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        $project = Project::with('users')->findOrFail($id);
+        $project = Project::with(['users', 'activities', 'items'])->findOrFail($id);
         return view('projects.show', compact('project'));
     }
 
@@ -138,7 +138,7 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
         $items = Item::all();
-        $assignedItems = $project->items->pluck('id_item')->toArray();
+        $assignedItems = $project->items->pluck('pivot.percentage', 'id_item')->toArray(); // Obtenemos los porcentajes actuales de la relación
 
         return view('projects.veritems', compact('project', 'items', 'assignedItems'));
     }
@@ -156,8 +156,8 @@ class ProjectController extends Controller
             $totalPercentage += $percentages[$itemId] ?? 0;
         }
 
-        if ($totalPercentage > 100) {
-            return back()->withInput()->with('error', 'La suma de los porcentajes no puede ser mayor a 100.');
+        if ($totalPercentage !== 100) {
+            return back()->withInput()->with('error', 'La suma de los porcentajes debe ser exactamente 100%.');
         }
 
         foreach ($items as $itemId) {
@@ -166,6 +166,6 @@ class ProjectController extends Controller
 
         $project->items()->sync($syncData);
 
-        return redirect()->route('projects.show', $project->id_project)->with('success', 'Items asignados correctamente.');
+        return redirect()->route('projects.show', $project->id_project)->with('success', 'Items asignados correctamente con un total de 100%.');
     }
 }

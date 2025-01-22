@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inici - StudyXP</title>
+    <title>Inici Professor - StudyXP</title>
     <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -71,6 +71,12 @@
                 @endforeach
             </div>
         </div>
+        @if(auth()->user()->is_profesor)
+            <div class="evaluation-section">
+                <div class="evaluation-button">ALUMNES</div>
+                <div class="evaluation-button">ITEMS</div>
+            </div>
+        @endif
     </main>
 </div>
 </body>
