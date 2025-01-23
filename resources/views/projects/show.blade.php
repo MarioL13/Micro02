@@ -51,6 +51,9 @@
                 <a href="/project/{{ $project->id_project }}/veritems">
                     <button class="stats-button">Asignar Items</button>
                 </a>
+                <a href="{{ route('activities.create', $project->id_project) }}">
+                    <button class="stats-button">Crear Actividad</button>
+                </a>
             @else
                 <a>
                     <button class="stats-button">Estadístiques Activitat</button>
@@ -58,67 +61,48 @@
             @endif
         </div>
 
+        <!-- Items Avaluatius -->
+        <section class="assigned-items">
+            <h2>Items Avaluatius:</h2>
+            <div class="evaluation-items">
+                @foreach ($project->items as $item)
+                    <div class="item">
+                        <img class="round-image" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}">
+                        <span>{{ $item->title }} - {{ $item->pivot->percentage }}%</span>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
         <!-- Informació Activitat -->
+        <h2>Informació Activitat</h2>
         <section class="activities info-act">
-            <h2>Informació Activitat</h2>
             <p><strong>Títol: </strong>{{ $project->title }}</p>
             <p><strong>Descripció: </strong>{{ $project->description }}</p>
             <p><strong>Data Inicial: </strong>{{ $project->creation_date }}</p>
             <p><strong>Data Final: </strong>{{ $project->limit_date }}</p>
         </section>
 
-        <!-- Items Avaluatius -->
-        <section class="assigned-items">
-            <h3>Items Avaluatius:</h3>
-            <div class="evaluation-items">
-                @foreach ($project->items as $item)
-                    <div class="item">
-                        <img class="round-image" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->name }}">
-                        <span>{{ $item->title }} - {{ $item->percentage }}%</span>
+        <!-- Activitats -->
+        <h2>Actividades:</h2>
+        <div class="activities">
+            <div class="activities-list">
+                @foreach ($project->activities as $activity)
+                    <div class="activity">
+                        <a class="underline" href="{{ route('activities.show', $activity->id_activity) }}">{{ $activity->title }}</a>
+                            <a>{{ $activity->description }}</a>
+                        <div class="activity-actions">
+                            <a {{ route('activities.edit', $activity->id_activity) }}"><button class="stats-button">Editar</button></a>
+                            <form action="{{ route('activities.destroy', $activity->id_activity) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="stats-button" onclick="return confirm('¿Estás seguro de eliminar esta actividad?')">Eliminar</button>
+                            </form>
+                        </div>
                     </div>
                 @endforeach
             </div>
-        </section>
-<button><a href="/project/{{ $project->id_project }}/veritems">Asignar Items</a></button>
-<ul>
-    @foreach ($project->items as $item)
-        <li>
-            <img height="25px" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->title }}">
-            {{ $item->title }} - {{ $item->pivot->percentage }}%
-        </li>
-    @endforeach
-</ul>
-
-
-<h3>Actividades:</h3>
-<a href="{{ route('activities.create', $project->id_project) }}" class="btn btn-primary">Crear Actividad</a>
-<table class="table" border = "1px">
-    <thead>
-    <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach ($project->activities as $activity)
-        <tr>
-            <td>{{ $activity->title }}</td>
-            <td>{{ $activity->description }}</td>
-            <td>
-                <a href="{{ route('activities.show', $activity->id_activity) }}" class="btn btn-info">Ver</a>
-                <a href="{{ route('activities.edit', $activity->id_activity) }}" class="btn btn-warning">Editar</a>
-                <form action="{{ route('activities.destroy', $activity->id_activity) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta actividad?')">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
-
+        </div>
 
         <div class="save-button">
             <a href="{{ route('projects.index') }}">

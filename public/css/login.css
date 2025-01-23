@@ -13,9 +13,7 @@
 .login-container {
     background-color: #CBDCEB;
     width: 700px;
-    /* Ancho aumentado */
     padding: 70px;
-    /* Espaciado interno ajustado */
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -39,14 +37,13 @@
 .content-wrapper {
     display: flex;
     gap: 130px;
-    /* Espacio entre el logo y los inputs */
 }
 
 .logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 10%;
+    width: 200px;
 }
 
 .logo img {
@@ -64,30 +61,21 @@
 
 .input-group {
     position: relative;
-    /* Necesario para posicionar los íconos */
     margin-top: 20px;
-    /* Espaciado entre los grupos */
 }
 
 .input-group i {
     position: absolute;
-    /* Posiciona el ícono dentro del contenedor */
     top: 50%;
-    /* Centra verticalmente el ícono */
     left: 15px;
-    /* Espaciado desde la izquierda */
     transform: translateY(-50%);
-    /* Ajusta el centrado */
     color: #CBDCEB;
-    /* Color del ícono */
     font-size: 18px;
-    /* Tamaño del ícono */
 }
 
 .input-group input {
-    width: 100%;
+    width: 87%;
     padding: 15px 15px 15px 40px;
-    /* Añadimos espacio a la izquierda para el ícono */
     border: none;
     border-radius: 20px;
     background-color: #608BC1;
@@ -96,13 +84,17 @@
     outline: none;
 }
 
+.input:-webkit-autofill {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0px 1000px white inset !important; /* Truco para sobreescribir el fondo */
+}
+
 .input-group input::placeholder {
     color: #CBDCEB;
 }
 
 .input-group input:focus {
-    background-color: #4A78A9;
-    /* Color diferente al hacer focus */
     outline: none;
 }
 

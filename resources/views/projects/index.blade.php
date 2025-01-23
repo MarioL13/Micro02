@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inici Professor - StudyXP</title>
+    <title>Inici - StudyXP</title>
     <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -44,8 +44,10 @@
             <h2>BENVINGUT</h2>
             @if(auth()->user()->is_profesor)
                 <button class="stats-button">Crear Projectes</button>
-                <div class="stats-button">Alumnes</div>
-                <div class="stats-button">Items</div>
+                <button class="stats-button">Alumnes</button>
+                <button class="stats-button">Items</button>
+            @else
+                <button class="stats-button">Estadístiques Activitats</button>
             @endif
         </div>
 
@@ -53,30 +55,23 @@
             <h2>Llistat Projectes</h2>
             <div class="activities-list">
                 @foreach($projects as $project)
-                    <a href="/projects/{{ $project->id_project}}" class="activity-link">
 
                         <div class="activity">
-                            {{$project->title}}
+                            <a href="/projects/{{ $project->id_project}}" class="underline">{{$project->title}}</a>
                             @if(auth()->user()->is_profesor)
-                            <a href="/project/{{ $project->id_project }}/edit"><button class="stats-button">Modificar</button></a>
+                                <a href="/project/{{ $project->id_project }}/edit"><button class="stats-button">Modificar</button></a>
 
                                 <form action="/projects/{{ $project->id_project }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="stats-button" type="submit")>Eliminar</button>
-                            </form>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="stats-button" type="submit")>Eliminar</button>
+                                </form>
                             @endif
                         </div>
                     </a>
                 @endforeach
             </div>
         </div>
-        @if(auth()->user()->is_profesor)
-            <div class="evaluation-section">
-                <div class="evaluation-button">ALUMNES</div>
-                <div class="evaluation-button">ITEMS</div>
-            </div>
-        @endif
     </main>
 </div>
 </body>
