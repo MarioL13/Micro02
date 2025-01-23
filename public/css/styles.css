@@ -131,6 +131,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+    margin-left: 10px;
 }
 
 .stats-button:hover {
@@ -176,9 +177,11 @@ body {
 
 /* Activities Section */
 .activities {
-  background-color:#608BC1;
-  border-radius: 10px;
-  padding: 25px;
+    background-color: #608BC1;
+    border-radius: 10px;
+    padding: 25px;
+    max-height: 500px; /* Ajusta esta altura según tus necesidades */
+    overflow-y: auto;
 }
 
 .activities h2 {
@@ -186,9 +189,11 @@ body {
 }
 
 .activities-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-height: 450px; /* Ajusta esta altura según tus necesidades */
+    overflow-y: auto;
 }
 
 .activity {
@@ -257,6 +262,7 @@ body {
 .save-button {
   text-align: right;
   margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .save-button button {
@@ -293,22 +299,6 @@ body {
   margin-right: 29px;
 }
 
-.evaluation-button {
-  width: auto;
-  padding: 30px 70px;
-  background-color: #608BC1;
-  color: white;
-  text-align: center;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.evaluation-button:hover {
-  background-color: #133E87;
-  color: #F3F3E0;
-}
-
 .activity-prof {
   background-color: #CBDCEB;
   text-align: center;
@@ -337,6 +327,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+    margin-bottom: 10px;
 }
 
 .info-act {
@@ -351,17 +342,13 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+    margin-top: 10px;
 }
 
 .evaluation-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-
-.evaluation-button:hover {
-  background-color: #608BC1;
 }
 
 .activity.no-hover {

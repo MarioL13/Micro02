@@ -43,16 +43,16 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="header-content">
-            <h2>Detalles del Proyecto</h2>
+            <h2>Detalls del Projecte</h2>
             @if(auth()->user()->is_profesor)
                 <a href="/project/{{ $project->id_project }}/veralumnos">
-                    <button class="stats-button">Asignar Alumnos</button>
+                    <button class="stats-button">Assignar Alumnes</button>
                 </a>
                 <a href="/project/{{ $project->id_project }}/veritems">
-                    <button class="stats-button">Asignar Items</button>
+                    <button class="stats-button">Assignar Items</button>
                 </a>
                 <a href="{{ route('activities.create', $project->id_project) }}">
-                    <button class="stats-button">Crear Actividad</button>
+                    <button class="stats-button">Crear Activitat</button>
                 </a>
             @else
                 <a>
@@ -84,7 +84,7 @@
         </section>
 
         <!-- Activitats -->
-        <h2>Actividades:</h2>
+        <h2>Activitats:</h2>
         <div class="activities">
             <div class="activities-list">
                 @foreach ($project->activities as $activity)
