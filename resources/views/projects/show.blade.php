@@ -15,7 +15,9 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="profile">
-            <div class="avatar"></div>
+            <div class="avatar">
+                <img class="round-image" src="{{ asset('storage/' . $user->image) }}" alt="Icono de {{ $user->name }}">
+            </div>
             <p>Hola, {{auth()->user()->name}}</p>
         </div>
         <div class="logo">
