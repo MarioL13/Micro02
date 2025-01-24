@@ -52,7 +52,7 @@ CREATE TABLE items (
 CREATE TABLE user_projects (
                                id_user         INT,
                                id_project      INT,
-                               grade           FLOAT,          -- Nota final asignada al proyecto para el usuario
+                               grade           FLOAT,
                                PRIMARY KEY (id_user, id_project),
                                FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
                                FOREIGN KEY (id_project) REFERENCES projects(id_project) ON DELETE CASCADE
@@ -62,8 +62,8 @@ CREATE TABLE user_projects (
 CREATE TABLE project_items (
                                id_project      INT,
                                id_item         INT,
-                               percentage      FLOAT NOT NULL, -- % que vale en la nota final
-                               grade           FLOAT,         -- Nota asignada al ítem
+                               percentage      FLOAT NOT NULL,
+                               grade           FLOAT,
                                PRIMARY KEY (id_project, id_item),
                                FOREIGN KEY (id_project) REFERENCES projects(id_project) ON DELETE CASCADE,
                                FOREIGN KEY (id_item) REFERENCES items(id_item) ON DELETE CASCADE
@@ -73,46 +73,46 @@ CREATE TABLE project_items (
 CREATE TABLE activity_items (
                                 id_activity     INT,
                                 id_item         INT,
-                                percentage      FLOAT NOT NULL, -- % que vale en la nota final
-                                grade           FLOAT,         -- Nota asignada al ítem en la actividad
+                                percentage      FLOAT NOT NULL,
+                                grade           FLOAT,
                                 PRIMARY KEY (id_activity, id_item),
                                 FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE,
                                 FOREIGN KEY (id_item) REFERENCES items(id_item) ON DELETE CASCADE
 );
 
--- Tabla intermedia actividades (con porcentaje y nota para el usuario)
-CREATE TABLE activity_grades (
-                                 id_activity     INT,
-                                 id_user         INT,
-                                 grade           FLOAT,         -- Nota asignada a la actividad para el usuario
-                                 PRIMARY KEY (id_activity, id_user),
-                                 FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE,
-                                 FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
+-- Nueva tabla: Notas por ítem, usuario y actividad
+CREATE TABLE activity_item_grades (
+                                      id_activity     INT,
+                                      id_item         INT,
+                                      id_user         INT,
+                                      grade           FLOAT,
+                                      PRIMARY KEY (id_activity, id_item, id_user),
+                                      FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE,
+                                      FOREIGN KEY (id_item) REFERENCES items(id_item) ON DELETE CASCADE,
+                                      FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
--- Consulta para verificar las tablas creadas
-SHOW TABLES;
-
+-- Inserts en la tabla de usuarios
 INSERT INTO users (name, surname, email, password, birthdate, state, dni, is_profesor, image, creation_date)
 VALUES
     ('Juan', 'Pérez', 'juan.perez@example.com', 'password123', '2000-05-15', 1, '12345678A', 0, 'juan.jpg', '2024-12-05'),
     ('Ana', 'López', 'ana.lopez@example.com', 'password456', '1999-08-20', 1, '87654321B', 0, 'ana.jpg', '2024-12-05'),
     ('Luis', 'Martínez', 'luis.martinez@example.com', 'password789', '2001-02-10', 1, '11223344C', 0, 'luis.jpg', '2024-12-05');
 
--- Inserts en la tabla de proyectos (dos proyectos)
+-- Inserts en la tabla de proyectos
 INSERT INTO projects (title, description, creation_date, limit_date)
 VALUES
     ('Proyecto Innovador', 'Un proyecto sobre innovación tecnológica.', '2024-12-01', '2025-01-15'),
     ('Proyecto Sostenible', 'Proyecto enfocado en la sostenibilidad ambiental.', '2024-12-02', '2025-01-20');
 
--- Inserts en la tabla de actividades (tres actividades)
+-- Inserts en la tabla de actividades
 INSERT INTO activities (id_project, title, state, creation_date, limit_date, description)
 VALUES
     (1, 'Investigar Innovaciones', 1, '2024-12-03', '2024-12-10', 'Actividad para investigar innovaciones recientes.'),
     (1, 'Desarrollar Prototipo', 0, '2024-12-04', '2024-12-15', 'Crear un prototipo basado en la investigación.'),
     (2, 'Análisis Ambiental', 1, '2024-12-05', '2024-12-12', 'Evaluar impactos ambientales de proyectos similares.');
 
--- Inserts en la tabla de ítems (cuatro ítems)
+-- Inserts en la tabla de ítems
 INSERT INTO items (title, description, icon)
 VALUES
     ('Documentación', 'Crear y organizar documentos.', 'doc-icon'),
@@ -120,7 +120,7 @@ VALUES
     ('Desarrollo', 'Implementar soluciones técnicas.', 'code-icon'),
     ('Presentación', 'Preparar diapositivas y exposiciones.', 'presentation-icon');
 
-
+-- Inserts en la tabla user_projects
 INSERT INTO user_projects (id_user, id_project, grade)
 VALUES
     (1, 1, NULL), -- Juan participa en el Proyecto Innovador
@@ -128,6 +128,7 @@ VALUES
     (3, 2, NULL), -- Luis participa en el Proyecto Sostenible
     (3, 1, NULL); -- Luis participa en el Proyecto Innovador
 
+-- Inserts en la tabla activity_items
 INSERT INTO activity_items (id_activity, id_item, percentage, grade)
 VALUES
     (1, 1, 50, NULL), -- Documentación vale 50% en la actividad de Investigar Innovaciones
@@ -135,6 +136,7 @@ VALUES
     (2, 3, 100, NULL), -- Desarrollo vale 100% en la actividad de Desarrollar Prototipo
     (3, 4, 100, NULL); -- Presentación vale 100% en la actividad de Análisis Ambiental
 
+-- Inserts en la tabla project_items
 INSERT INTO project_items (id_project, id_item, percentage, grade)
 VALUES
     (1, 1, 40, NULL), -- Documentación vale 40% en el Proyecto Innovador
@@ -142,12 +144,15 @@ VALUES
     (2, 3, 50, NULL), -- Desarrollo vale 50% en el Proyecto Sostenible
     (2, 4, 50, NULL); -- Presentación vale 50% en el Proyecto Sostenible
 
-INSERT INTO activity_grades (id_activity, id_user, grade)
+-- Inserts en la tabla activity_item_grades
+INSERT INTO activity_item_grades (id_activity, id_item, id_user, grade)
 VALUES
-    (1, 1, NULL), -- Juan tiene el 33.33% de nota en Investigar Innovaciones
-    (1, 2, NULL), -- Ana tiene el 33.33% de nota en Investigar Innovaciones
-    (1, 3, NULL), -- Luis tiene el 33.33% de nota en Investigar Innovaciones
-    (2, 1, NULL),   -- Juan tiene el 100% de nota en Desarrollar Prototipo
-    (3, 3, NULL);   -- Luis tiene el 100% de nota en Análisis Ambiental
+    (1, 1, 1, 8.5), -- Juan, ítem "Documentación" en la actividad 1
+    (1, 2, 1, 9.0), -- Juan, ítem "Investigación" en la actividad 1
+    (1, 1, 2, 7.0), -- Ana, ítem "Documentación" en la actividad 1
+    (1, 2, 2, 8.0), -- Ana, ítem "Investigación" en la actividad 1
+    (1, 1, 3, 6.5), -- Luis, ítem "Documentación" en la actividad 1
+    (1, 2, 3, 7.5); -- Luis, ítem "Investigación" en la actividad 1
 
-SELECT * FROM activity_grades;
+-- Consulta para verificar las tablas creadas
+SHOW TABLES;
