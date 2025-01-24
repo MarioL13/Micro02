@@ -23,12 +23,13 @@
     @forelse ($activity->items as $item)
         <li>
             {{ $item->title }}
-            (Porcentage: {{ $item->pivot->percentage }})
+            (Porcentaje: {{ $item->pivot->percentage }}%)
         </li>
     @empty
         <li>No hay ítems asignados a esta actividad.</li>
     @endforelse
 </ul>
+<a href="{{ route('activities.grade', $activity->id_activity) }}" class="btn btn-primary">Poner Notas</a>
 
 </body>
 </html>

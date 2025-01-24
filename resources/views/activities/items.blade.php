@@ -27,7 +27,8 @@
                 <td>{{ $item->description }}</td>
                 <td>
                     <input type="number" name="percentages[{{ $item->id_item }}]"
-                           value="{{ $assignedItems[$item->id_item] ?? 0 }}">
+                           value="{{old('percentages.' . $item->id_item ,$assignedItems[$item->id_item] ?? 0) }}"
+                           min="0" max="100" step="1">
                 </td>
                 <td>
                     <input type="checkbox" name="items[]" value="{{ $item->id_item }}"

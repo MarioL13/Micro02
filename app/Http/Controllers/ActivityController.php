@@ -78,6 +78,19 @@ class ActivityController extends Controller
         return view('activities.items', compact('activity', 'projectItems', 'assignedItems'));
     }
 
+    public function grades($id)
+    {
+        $activity = Activity::with(['items' => function ($query) {
+            $query->withPivot('percentage');
+        }])->findOrFail($id);
+
+        $projectUsers = $activity->project->items;
+
+        $assignedItems = $activity->items;
+
+        return view('activities.grade', compact('activity', 'assignedItems'));
+    }
+
     public function assignItems(Request $request, $id)
     {
         $activity = Activity::findOrFail($id);
@@ -85,9 +98,15 @@ class ActivityController extends Controller
         $percentages = $request->input('percentages', []);
 
         $syncData = [];
+        $totalPercentage = 0;
 
         foreach ($items as $itemId) {
+            $totalPercentage += $percentages[$itemId] ?? 0;
             $syncData[$itemId] = ['percentage' => $percentages[$itemId] ?? 0];
+        }
+
+        if ($totalPercentage > 100) {
+            return back()->withInput()->with('error', 'La suma de los porcentajes no debe exceder el 100%.');
         }
 
         $activity->items()->sync($syncData);
@@ -98,7 +117,9 @@ class ActivityController extends Controller
 
     public function show($id)
     {
-        $activity = Activity::with('items', 'project')->findOrFail($id);
+        $activity = Activity::with(['items' => function ($query) {
+            $query->withPivot('percentage');
+        }, 'project'])->findOrFail($id);
 
         return view('activities.show', compact('activity'));
     }

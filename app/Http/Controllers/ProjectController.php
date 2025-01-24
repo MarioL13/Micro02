@@ -116,7 +116,7 @@ class ProjectController extends Controller
         $assignedUsers = $project->users->pluck('id_user')->toArray();
 
         return view('projects.veralumnos', compact('project', 'users', 'assignedUsers'));
-    }
+    }    
 
     public function assignStudents(Request $request, $id)
     {
@@ -138,7 +138,7 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
         $items = Item::all();
-        $assignedItems = $project->items->pluck('pivot.percentage', 'id_item')->toArray(); // Obtenemos los porcentajes actuales de la relación
+        $assignedItems = $project->items->pluck('pivot.percentage', 'id_item')->toArray();
 
         return view('projects.veritems', compact('project', 'items', 'assignedItems'));
     }

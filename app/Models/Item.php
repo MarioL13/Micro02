@@ -12,9 +12,9 @@ class Item extends Model
 
     public $timestamps = false;
 
-    public function projects()
+    public function activities()
     {
-        return $this->belongsToMany(Project::class, 'project_items', 'id_item', 'id_project')
+        return $this->belongsToMany(Activity::class, 'activity_items', 'id_item', 'id_activity')
             ->withPivot('percentage');
     }
 }

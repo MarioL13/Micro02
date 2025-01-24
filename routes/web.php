@@ -40,3 +40,4 @@ Route::delete('/activities/{activity}', [ActivityController::class, 'destroy'])-
 Route::get('/activities/{id}/items', [ActivityController::class, 'items'])->name('activities.items');
 Route::post('/activities/{id}/items', [ActivityController::class, 'assignItems'])->name('activities.assignItems');
 Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
+Route::get('/activities/{id}/grade', [ActivityController::class, 'grades'])->name('activities.grade');
