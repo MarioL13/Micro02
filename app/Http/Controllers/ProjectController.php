@@ -116,7 +116,7 @@ class ProjectController extends Controller
         $assignedUsers = $project->users->pluck('id_user')->toArray();
 
         return view('projects.veralumnos', compact('project', 'users', 'assignedUsers'));
-    }    
+    }
 
     public function assignStudents(Request $request, $id)
     {
@@ -150,10 +150,11 @@ class ProjectController extends Controller
         $percentages = $request->input('percentages', []);
 
         $syncData = [];
-
         $totalPercentage = 0;
+
         foreach ($items as $itemId) {
             $totalPercentage += $percentages[$itemId] ?? 0;
+            $syncData[$itemId] = ['percentage' => $percentages[$itemId] ?? 0];
         }
 
         if ($totalPercentage !== 100) {

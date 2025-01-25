@@ -27,12 +27,15 @@
                 <td>{{ $item->description }}</td>
                 <td>
                     <input type="number" name="percentages[{{ $item->id_item }}]"
-                           value="{{old('percentages.' . $item->id_item ,$assignedItems[$item->id_item] ?? 0) }}"
+                           value="{{ old('percentages.' . $item->id_item, $assignedItems[$item->id_item] ?? 0) }}"
                            min="0" max="100" step="1">
                 </td>
                 <td>
-                    <input type="checkbox" name="items[]" value="{{ $item->id_item }}"
-                        {{ in_array($item->id_item, $assignedItems) ? 'checked' : '' }}>
+                    <input type="checkbox"
+                           name="items[]"
+                           value="{{ $item->id_item }}"
+                        {{ in_array($item->id_item, array_keys($assignedItems)) ? 'checked' : '' }}>
+
                 </td>
             </tr>
         @endforeach
@@ -40,5 +43,12 @@
     </table>
     <button type="submit">Guardar Cambios</button>
 </form>
+@if ($errors->any())
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+@endif
 </body>
 </html>

@@ -71,12 +71,16 @@ class ActivityController extends Controller
 
     public function items($id)
     {
-        $activity = Activity::with('items')->findOrFail($id);
+        $activity = Activity::with(['items' => function ($query) {
+            $query->withPivot('percentage');
+        }])->findOrFail($id);
+
         $projectItems = $activity->project->items;
-        $assignedItems = $activity->items->pluck('id_item')->toArray();
+        $assignedItems = $activity->items->pluck('pivot.percentage', 'id_item')->toArray();
 
         return view('activities.items', compact('activity', 'projectItems', 'assignedItems'));
     }
+
 
     public function grades($id)
     {
@@ -105,13 +109,19 @@ class ActivityController extends Controller
             $syncData[$itemId] = ['percentage' => $percentages[$itemId] ?? 0];
         }
 
-        if ($totalPercentage > 100) {
-            return back()->withInput()->with('error', 'La suma de los porcentajes no debe exceder el 100%.');
+        if ($totalPercentage !== 100) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'La suma de los porcentajes debe ser exactamente 100%.']);
+        }
+
+        foreach ($items as $itemId) {
+            $syncData[$itemId] = ['percentage' => $percentages[$itemId] ?? 0];
         }
 
         $activity->items()->sync($syncData);
 
-        return redirect()->route('activities.items', $activity->id_activity)
+        return redirect()->route('activities.show', $activity->id_activity)
             ->with('success', 'Ítems asignados correctamente a la actividad.');
     }
 
