@@ -41,3 +41,4 @@ Route::get('/activities/{id}/items', [ActivityController::class, 'items'])->name
 Route::post('/activities/{id}/items', [ActivityController::class, 'assignItems'])->name('activities.assignItems');
 Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
 Route::get('/activities/{id}/grade', [ActivityController::class, 'grades'])->name('activities.grade');
+Route::post('/activities/{id}/assign-grades', [ActivityController::class, 'assignGrades'])->name('activities.assignGrades');

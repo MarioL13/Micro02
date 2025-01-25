@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\ActivityItemGrade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
@@ -133,4 +135,54 @@ class ActivityController extends Controller
 
         return view('activities.show', compact('activity'));
     }
+
+    public function assignGrades(Request $request, $id)
+    {
+        // Validar los datos del formulario
+        $validated = $request->validate([
+            'id_user' => 'required|exists:users,id_user',
+            'grades' => 'required|array',
+            'grades.*' => 'nullable|numeric|min:0|max:10',
+        ]);
+
+        // Convertir $id a entero
+        $id = (int) $id;
+
+        // Recuperar los valores
+        $idUser = $validated['id_user'];
+        $grades = $validated['grades'];
+
+        // Asegurarse de que las claves sean enteros y los valores sean flotantes
+        $processedGrades = [];
+        foreach ($grades as $idItem => $grade) {
+            $processedGrades[(int)$idItem] = (float)$grade;
+        }
+
+        // Crear o actualizar el registro en la tabla
+        foreach ($processedGrades as $idItem => $grade) {
+            // Evitar procesar valores nulos
+            if ($grade === null) {
+                continue;
+            }
+
+            // Insertar o actualizar en la tabla activity_item_grades
+            ActivityItemGrade::updateOrCreate(
+                [
+                    'id_activity' => $id,
+                    'id_user' => $idUser,
+                    'id_item' => $idItem,
+                ],
+                [
+                    'grade' => $grade,
+                ]
+            );
+        }
+
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('activities.grade', $id)
+            ->with('success', 'Las notas se han asignado correctamente.');
+    }
+
+
+
 }
