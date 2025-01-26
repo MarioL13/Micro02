@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -170,5 +171,76 @@ class UserController extends Controller
         }
         $user->save();
         return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado');
+    }
+    public function importCsv(Request $request)
+    {
+        // Validar que se suba un archivo CSV
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        try {
+            // Cargar el archivo CSV
+            $file = $request->file('csv_file');
+            $filePath = $file->getRealPath();
+
+            // Abrir el archivo y leer su contenido
+            $fileHandle = fopen($filePath, 'r');
+
+            // Leer la cabecera del archivo CSV
+            $header = fgetcsv($fileHandle);
+
+            // Validar que las columnas esperadas estén presentes
+            $expectedColumns = ['name', 'surname', 'email', 'password', 'birthdate', 'dni'];
+            if ($header !== $expectedColumns) {
+                return back()->withErrors(['error' => 'El archivo CSV debe contener las columnas: ' . implode(', ', $expectedColumns)]);
+            }
+
+            // Procesar cada fila del archivo CSV
+            $users = [];
+            while (($row = fgetcsv($fileHandle)) !== false) {
+                $rowData = array_combine($header, $row);
+
+                // Validar los datos de cada fila
+                $validator = Validator::make($rowData, [
+                    'name' => 'required|max:255',
+                    'surname' => 'required|max:255',
+                    'email' => 'required|email|max:255|unique:users,email',
+                    'password' => 'required|min:6',
+                    'birthdate' => 'required|date',
+                    'dni' => 'required|max:255',
+                ]);
+
+                if ($validator->fails()) {
+                    // Opcional: puedes registrar los errores de cada fila
+                    continue; // Saltar esta fila si tiene errores
+                }
+
+                // Almacenar los usuarios para insertarlos en lote
+                $users[] = [
+                    'name' => $rowData['name'],
+                    'surname' => $rowData['surname'],
+                    'email' => $rowData['email'],
+                    'password' => bcrypt($rowData['password']),
+                    'birthdate' => $rowData['birthdate'],
+                    'dni' => $rowData['dni'],
+                    'image' => null,
+                    'creation_date' => now()->toDateString(),
+                    'state' => 1,
+                    'is_profesor' => 0,
+                ];
+            }
+
+            fclose($fileHandle);
+
+            // Insertar los usuarios en la base de datos
+            if (!empty($users)) {
+                User::insert($users);
+            }
+
+            return redirect()->route('users.index')->with('success', 'Usuarios importados correctamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Hubo un error al procesar el archivo: ' . $e->getMessage()]);
+        }
     }
 }

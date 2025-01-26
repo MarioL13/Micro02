@@ -54,6 +54,14 @@
             <a href="{{ route('welcome') }}"><button class="stats-button">Volver</button></a>
 
             <a href="/users/create"><button class="stats-button">Crear Usuari</button></a>
+            <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div>
+                    <label for="csv_file">Archivo CSV:</label>
+                    <input type="file" name="csv_file" id="csv_file" required>
+                </div>
+                <button type="submit">Importar Usuarios</button>
+            </form>
         </div>
 
         <div class="activities">
