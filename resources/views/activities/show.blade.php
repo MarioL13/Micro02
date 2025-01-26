@@ -52,6 +52,9 @@
             <a href="{{ route('activities.grade', $activity->id_activity) }}">
                 <button class="stats-button">Posar Notas</button>
             </a>
+            <a href="{{ route('activities.stats', $activity->id_activity) }}">
+                <button class="stats-button">Estadistiques Projecte</button>
+            </a>
         </div>
 
         <section class="activities info-act">

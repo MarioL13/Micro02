@@ -24,6 +24,7 @@ Route::post('/project/{id}/assign-students', [ProjectController::class, 'assignS
 Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->middleware('auth');
 Route::get('/project/{id}/veritems', [ProjectController::class, 'items']);
 Route::post('/project/{id}/assign-items', [ProjectController::class, 'assignItems'])->middleware('auth');
+Route::get('/project/{id}/stats', [ProjectController::class, 'projectStats'])->name('project.stats');
 
 Route::resource('items', ItemController::class)->middleware('auth');
 Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->middleware('auth');
@@ -42,3 +43,4 @@ Route::post('/activities/{id}/items', [ActivityController::class, 'assignItems']
 Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
 Route::get('/activities/{id}/grade', [ActivityController::class, 'grades'])->name('activities.grade');
 Route::post('/activities/{id}/assign-grades', [ActivityController::class, 'assignGrades'])->name('activities.assignGrades');
+Route::get('/activities/{id}/stats', [ActivityController::class, 'activityStats'])->name('activities.stats');

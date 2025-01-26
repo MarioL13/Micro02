@@ -60,8 +60,8 @@
                     <button class="stats-button">Crear Activitat</button>
                 </a>
             @else
-                <a>
-                    <button class="stats-button">Estadístiques Activitat</button>
+                <a href="{{ route('project.stats', $project->id_project) }}">
+                    <button class="stats-button">Estadistiques Projecte</button>
                 </a>
             @endif
         </div>

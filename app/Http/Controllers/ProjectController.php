@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityItemGrade;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\Project;
@@ -168,5 +169,43 @@ class ProjectController extends Controller
         $project->items()->sync($syncData);
 
         return redirect()->route('projects.show', $project->id_project)->with('success', 'Items asignados correctamente con un total de 100%.');
+    }
+
+    public function projectStats($projectId)
+    {
+        $project = Project::with(['activities', 'items'])->findOrFail($projectId);
+        $userId = auth()->user()->id_user;
+
+        $totalWeightedGrade = 0; // Acumulador de la nota ponderada
+        $totalPercentage = 0; // Acumulador de los porcentajes totales
+
+        $stats = $project->items->map(function ($item) use ($project, $userId, &$totalWeightedGrade, &$totalPercentage) {
+            // Obtener las actividades relacionadas al proyecto y al ítem actual
+            $activityIds = $project->activities->pluck('id_activity');
+
+            // Calcular la nota media para este ítem
+            $averageGrade = ActivityItemGrade::where('id_item', $item->id_item)
+                ->whereIn('id_activity', $activityIds)
+                ->where('id_user', $userId)
+                ->avg('grade');
+
+            // Calcular la nota ponderada (si hay una nota válida)
+            if ($averageGrade !== null) {
+                $percentage = $item->pivot->percentage; // % del ítem
+                $totalWeightedGrade += ($averageGrade * $percentage / 100);
+                $totalPercentage += $percentage;
+            }
+
+            return [
+                'item' => $item->title,
+                'averageGrade' => $averageGrade !== null ? round($averageGrade, 2) : null,
+                'percentage' => $item->pivot->percentage,
+            ];
+        });
+
+        // Calcular la nota media del proyecto (ponderada)
+        $projectAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
+
+        return view('projects.stats', compact('project', 'stats', 'projectAverage'));
     }
 }

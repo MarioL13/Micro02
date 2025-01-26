@@ -25,7 +25,9 @@ class Activity extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'activity_items', 'id_activity', 'id_item');
+        return $this->belongsToMany(Item::class, 'activity_items', 'id_activity', 'id_item')
+            ->withPivot('percentage'); // Incluye el porcentaje desde la tabla pivot
     }
+
 
 }
