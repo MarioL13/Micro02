@@ -1,98 +1,125 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ca">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Usuarios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuaris - StudyXP</title>
+    <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
+
 <body>
-<h1>Usuarios</h1>
-<button><a href="{{ route('welcome') }}">Volver</a></button>
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="profile">
+            @if(auth()->user()->image)
+                <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+            @else
+                <div class="avatar"></div>
+            @endif
 
-<a href="/users/create"><button>Crear usuario</button></a>
-
-<!-- Tabla de usuarios activos -->
-<h2>Usuarios Activos</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Foto</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>DNI</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($users as $user)
-        @if($user->state == 1 && $user->is_profesor != 1)
-            <tr>
-                <td><img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}"></td>
-                <td>{{$user->name}}</td>
-                <td>{{$user->surname}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->dni}}</td>
-                <td>
-
-                    <button><a href="/users/{{ $user->id_user}}">Ver Detalles</a></button>
-                    <button><a href="/users/{{ $user->id_user}}/edit">Editar</a></button>
-                    <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
+            <p>Hola, {{ auth()->user()->name }}</p>
+        </div>
+        <div class="logo">
+            <img src="{{ asset('css/logo.png') }}" alt="StudyXP Logo">
+        </div>
+        <nav class="bottom-menu">
+            <ul>
+                @if(auth()->user()->is_profesor == 0)
+                    <li>
+                        <i class='bx bxs-user'></i>
+                        <a href="/users/{{ auth()->user()->id_user }}">
+                            <button class="stats-button" type="submit">Les meves dades</button>
+                        </a>
+                    </li>
+                @endif
+                <li>
+                    <i class='bx bx-log-out'></i>
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        @method('PATCH')
-                        <button type="submit">Desactivar</button>
+                        <button class="stats-button" type="submit">Tancar sessió</button>
                     </form>
-                </td>
-            </tr>
-        @endif
-    @endforeach
-    </tbody>
-</table>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
-<!-- Tabla de usuarios desactivados -->
-<h2>Usuarios Desactivados</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Foto</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>DNI</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($users as $user)
-        @if($user->state == 0 && $user->is_profesor != 1)
-            <tr>
-                <td><img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}"></td>
-                <td>{{$user->name}}</td>
-                <td>{{$user->surname}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->dni}}</td>
-                <td>
-                    <a href="/users/{{ $user->id_user }}">Ver Detalles</a>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header-content">
+            <h2>Usuaris</h2>
+            <a href="{{ route('welcome') }}"><button class="stats-button">Volver</button></a>
 
-                    <!-- Formulario para activar el usuario -->
-                    <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit">Activar</button>
-                    </form>
+            <a href="/users/create"><button class="stats-button">Crear Usuari</button></a>
+        </div>
 
-                    <form action="/users/{{ $user->id_user }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit")>Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-        @endif
-    @endforeach
-    </tbody>
-</table>
+        <div class="activities">
+            <h2>Usuaris Actius</h2>
+            <div class="activities">
+                @foreach($users as $user)
+                    @if($user->state == 1 && $user->is_profesor != 1)
+                        <div class="activity">
+                            <div class="activity-info">
+                                <img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
+                                <p><strong>Nom:</strong> {{ $user->name }}</p>
+                                <p><strong>Cognom:</strong> {{ $user->surname }}</p>
+                                <p><strong>Email:</strong> {{ $user->email }}</p>
+                                <p><strong>DNI:</strong> {{ $user->dni }}</p>
+                            </div>
+                            <div class="activity-actions">
+                                <a href="/users/{{ $user->id_user }}" ><button class="stats-button">Veure Detalls</button></a>
+                                <a href="/users/{{ $user->id_user }}/edit"><button class="stats-button">Editar</button></a>
+                                <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="stats-button">Desactivar</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+
+            <h2>Usuaris Desactivats</h2>
+            <div class="activities-list">
+                @foreach($users as $user)
+                    @if($user->state == 0 && $user->is_profesor != 1)
+                        <div class="activity">
+                            <div class="activity">
+                                <img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
+                                <div>
+                                    <p><strong>Nom:</strong> {{ $user->name }}</p>
+                                    <p><strong>Cognom:</strong> {{ $user->surname }}</p>
+                                    <p><strong>Email:</strong> {{ $user->email }}</p>
+                                    <p><strong>DNI:</strong> {{ $user->dni }}</p>
+                                </div>
+                            </div>
+                            <div class="activity-actions">
+                                <a href="/users/{{ $user->id_user }}">Veure Detalls</a>
+
+                                <!-- Formulario para activar el usuario -->
+                                <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit">Activar</button>
+                                </form>
+
+                                <form action="/users/{{ $user->id_user }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </main>
+</div>
 </body>
+
 </html>

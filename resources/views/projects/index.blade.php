@@ -13,25 +13,32 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="profile">
-            <div class="avatar"></div>
-            <p>Hola, {{auth()->user()->name}}</p>
+            @if(auth()->user()->image)
+                <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+            @else
+                <div class="avatar"></div>
+            @endif
+
+            <p>Hola, {{ auth()->user()->name }}</p>
         </div>
         <div class="logo">
-            <img src="{{asset('css/logo.png')}}" alt="StudyXP Logo">
+            <img src="{{ asset('css/logo.png') }}" alt="StudyXP Logo">
         </div>
         <nav class="bottom-menu">
             <ul>
                 @if(auth()->user()->is_profesor == 0)
                     <li>
                         <i class='bx bxs-user'></i>
-                        <a href="/users/{{ auth()->user()->id_user }}"><button class="stats-button" type="submit">Les meves dades</button></a>
+                        <a href="/users/{{ auth()->user()->id_user }}">
+                            <button class="stats-button" type="submit">Les meves dades</button>
+                        </a>
                     </li>
                 @endif
                 <li>
                     <i class='bx bx-log-out'></i>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="stats-button" type="submit">Tancar sessió</button></form>
+                        <button class="stats-button" type="submit">Tancar sessió</button>
                     </form>
                 </li>
             </ul>

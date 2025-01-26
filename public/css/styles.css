@@ -6,6 +6,7 @@ body {
   color: #133E87;
   display: flex;
   height: 100vh;
+    margin-bottom: 20px;
 }
 
 .container {
@@ -80,6 +81,7 @@ body {
     padding: 20px;
     width: 85%;
     box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
 
@@ -205,7 +207,7 @@ body {
   padding: 35px;
 }
 
-.activity a{
+.activity a, p{
     text-decoration: none;
     color: #133E87;
 }

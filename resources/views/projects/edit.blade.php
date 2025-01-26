@@ -15,7 +15,12 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="profile">
-            <div class="avatar"></div>
+            @if(auth()->user()->image)
+                <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+            @else
+                <div class="avatar"></div>
+            @endif
+
             <p>Hola, {{auth()->user()->name}}</p>
         </div>
         <div class="logo">
@@ -33,7 +38,7 @@
                     <i class='bx bx-log-out'></i>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="stats-button" type="submit">Tancar sessió</button>
+                        <button class="stats-button" type="submit">Tancar sessió</button></form>
                     </form>
                 </li>
             </ul>
