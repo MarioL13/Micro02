@@ -19,19 +19,24 @@
             @else
                 <div class="avatar"></div>
             @endif
-
-            <p class="hola">Hola, {{ auth()->user()->name }}</p>
+            <p class="hola">Hola, {{auth()->user()->name}}</p>
         </div>
         <div class="logo">
-            <img src="{{ asset('css/logo.png') }}" alt="Logo">
+            <img src="{{asset('css/logo.png')}}" alt="StudyXP Logo">
         </div>
         <nav class="bottom-menu">
             <ul>
+                @if(auth()->user()->is_profesor == 0)
+                    <li>
+                        <i class='bx bxs-user'></i>
+                        <a href="/users/{{ auth()->user()->id_user }}"><button class="stats-button" type="submit">Les meves dades</button></a>
+                    </li>
+                @endif
                 <li>
                     <i class='bx bx-log-out'></i>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="stats-button" type="submit">Cerrar sesión</button>
+                        <button class="stats-button" type="submit">Tancar sessió</button>
                     </form>
                 </li>
             </ul>
@@ -52,7 +57,7 @@
                         <p> {{ $item->title }}</p>
                     </div>
                     <div class="activity-actions">
-                        <a href="/items/{{ $item->id_item }}"><button class="stats-button">Ver Detalles</button></a>
+                        <a href="/items/{{ $item->id_item }}"><button class="stats-button">Veure Detalls</button></a>
                         <a href="/items/{{ $item->id_item }}/edit"><button class="stats-button">Editar</button></a>
                         <form action="/items/{{ $item->id_item }}" method="POST" style="display:inline;">
                             @csrf

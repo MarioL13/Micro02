@@ -49,11 +49,13 @@
     <main class="main-content">
         <div class="header-content">
             <h2>Detalls Activitat: {{ $activity->title }}</h2>
+            @if(auth()->user()->is_profesor == 1)
             <a href="{{ route('activities.grade', $activity->id_activity) }}">
-                <button class="stats-button">Posar Notas</button>
+                <button class="stats-button">Assignar Notes</button>
             </a>
+            @endif
             <a href="{{ route('activities.stats', $activity->id_activity) }}">
-                <button class="stats-button">Estadistiques Projecte</button>
+                <button class="stats-button">Estadistiques Activitat</button>
             </a>
         </div>
 
@@ -73,12 +75,14 @@
                         <span>{{ $item->title }} - {{ $item->pivot->percentage }}%</span>
                     </div>
                 @empty
-                    <p>No hay ítems asignados a esta actividad.</p>
+                    <p>No hi ha ítems assignats en aquesta actividad.</p>
                 @endforelse
             </div>
-            <a href="{{ route('activities.items', $activity->id_activity) }}">
-                <button class="stats-button">Assignar Items</button>
-            </a>
+            @if(auth()->user()->is_profesor == 1)
+                <a href="{{ route('activities.items', $activity->id_activity) }}">
+                    <button class="stats-button">Assignar Items</button>
+                </a>
+            @endif
         </section>
         <div class="save-button">
             <a href="{{ route('projects.show', $activity->project->id_project) }}">

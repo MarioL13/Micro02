@@ -62,7 +62,7 @@
                 <form action="/project/{{ $project->id_project }}/publicarNotas" method="POST">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="stats-button">Publicar Notas
+                    <button type="submit" class="stats-button">Publicar Notes
                     </button>
                 </form>
             @else
@@ -103,12 +103,14 @@
                         <a class="underline" href="{{ route('activities.show', $activity->id_activity) }}">{{ $activity->title }}</a>
                             <a>{{ $activity->description }}</a>
                         <div class="activity-actions">
+                            @if(auth()->user()->is_profesor == 1)
                             <a {{ route('activities.edit', $activity->id_activity) }}"><button class="stats-button">Editar</button></a>
                             <form action="{{ route('activities.destroy', $activity->id_activity) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="stats-button" onclick="return confirm('¿Estás seguro de eliminar esta actividad?')">Eliminar</button>
+                                <button type="submit" class="stats-button" onclick="return confirm('Vols eliminar aquesta activitat?')">Eliminar</button>
                             </form>
+                            @endif
                         </div>
                     </div>
                 @endforeach

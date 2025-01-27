@@ -53,8 +53,6 @@
                 <button class="stats-button">Crear Projectes</button>
                 <button class="stats-button">Alumnes</button>
                 <button class="stats-button">Items</button>
-            @else
-                <button class="stats-button">Estadístiques Activitats</button>
             @endif
         </div>
 

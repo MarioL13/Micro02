@@ -60,7 +60,7 @@
             @csrf
 
             <div class="mb-3">
-                <label for="id_user" class="form-label">Seleccionar Usuari</label>
+                <label for="id_user" class="form-label">Selecciona un Usuari</label>
                 <select name="id_user" id="id_user" class="form-select" required>
                     <option value="" disabled selected>-- Selecciona un Usuari --</option>
                     @foreach ($activity->project->users as $user)
@@ -78,7 +78,7 @@
             @endforeach
 
             <div>
-                <button type="submit" class="evaluation-button">Guardar Notes</button>
+                <button type="submit" class="stats-button">Guardar Notes</button>
             </div>
         </form>
 

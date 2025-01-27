@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Project {{$item->title}}</title>
+    <title>Editar Projecte - Study XP {{$item->title}}</title>
     <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -45,7 +45,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="header-content">
-            <h2>Editar Item: {{ $item->title }}</h2>
+            <h2>Editant l'Item: {{ $item->title }}</h2>
         </div>
 
         <form action="{{ route('items.update', ['item' => $item->id_item]) }}" method="POST" class="activities info-act" enctype="multipart/form-data">
