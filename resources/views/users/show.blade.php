@@ -63,8 +63,8 @@
                 <div class="right-section">
                     <h2>Imatge Perfil</h2>
                     <div class="profile">
-                        @if(auth()->user()->image)
-                            <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+                        @if($user->image)
+                            <img class="avatar" src="{{ asset('storage/' . $user->image) }}" alt="Icono de {{ $user->name }}">
                         @else
                             <div class="avatar"></div>
                         @endif

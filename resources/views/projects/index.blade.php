@@ -50,9 +50,9 @@
         <div class="header-content">
             <h2>BENVINGUT</h2>
             @if(auth()->user()->is_profesor)
-                <button class="stats-button">Crear Projectes</button>
-                <button class="stats-button">Alumnes</button>
-                <button class="stats-button">Items</button>
+                <a href="{{route('projects.create')}}"><button class="stats-button">Crear Projectes</button></a>
+                <a href="{{route('users.index')}}"><button class="stats-button">Alumnes</button></a>
+                <a href="{{route('items.index')}}"><button class="stats-button">Items</button></a>
             @endif
         </div>
 

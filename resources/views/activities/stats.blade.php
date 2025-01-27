@@ -71,7 +71,13 @@
                 @foreach ($stats as $stat)
                     <tr>
                         <td>{{ $stat['item'] }}</td>
-                        <td>{{ $stat['grade'] !== null ? $stat['grade'] : 'N/A' }}</td>
+                        <td>
+                            @if (array_key_exists('grade', $stat) && $stat['grade'] !== null)
+                                {{ $stat['grade'] }}
+                            @else
+                                N/A
+                            @endif
+                        </td>
                         <td>{{ $stat['percentage'] }}%</td>
                     </tr>
                 @endforeach

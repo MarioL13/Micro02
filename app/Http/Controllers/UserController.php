@@ -174,34 +174,27 @@ class UserController extends Controller
     }
     public function importCsv(Request $request)
     {
-        // Validar que se suba un archivo CSV
         $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
         try {
-            // Cargar el archivo CSV
             $file = $request->file('csv_file');
             $filePath = $file->getRealPath();
 
-            // Abrir el archivo y leer su contenido
             $fileHandle = fopen($filePath, 'r');
 
-            // Leer la cabecera del archivo CSV
             $header = fgetcsv($fileHandle);
 
-            // Validar que las columnas esperadas estén presentes
             $expectedColumns = ['name', 'surname', 'email', 'password', 'birthdate', 'dni'];
             if ($header !== $expectedColumns) {
                 return back()->withErrors(['error' => 'El archivo CSV debe contener las columnas: ' . implode(', ', $expectedColumns)]);
             }
 
-            // Procesar cada fila del archivo CSV
             $users = [];
             while (($row = fgetcsv($fileHandle)) !== false) {
                 $rowData = array_combine($header, $row);
 
-                // Validar los datos de cada fila
                 $validator = Validator::make($rowData, [
                     'name' => 'required|max:255',
                     'surname' => 'required|max:255',
@@ -212,11 +205,9 @@ class UserController extends Controller
                 ]);
 
                 if ($validator->fails()) {
-                    // Opcional: puedes registrar los errores de cada fila
-                    continue; // Saltar esta fila si tiene errores
+                    continue;
                 }
 
-                // Almacenar los usuarios para insertarlos en lote
                 $users[] = [
                     'name' => $rowData['name'],
                     'surname' => $rowData['surname'],
@@ -233,7 +224,6 @@ class UserController extends Controller
 
             fclose($fileHandle);
 
-            // Insertar los usuarios en la base de datos
             if (!empty($users)) {
                 User::insert($users);
             }
@@ -246,12 +236,10 @@ class UserController extends Controller
 
     public function updatePhoto(Request $request, $id)
     {
-        // Validar que el usuario sea el mismo que el autenticado
         if (auth()->id() != $id) {
             abort(403, 'No estás autorizado para realizar esta acción.');
         }
 
-        // Validar que se haya enviado una imagen válida
         $request->validate([
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -259,11 +247,9 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            // Subir la nueva imagen
             if ($request->hasFile('foto')) {
                 $fotoPath = $request->file('foto')->store('photos', 'public');
 
-                // Eliminar la foto anterior si existe
                 if ($user->image) {
                     \Storage::disk('public')->delete($user->image);
                 }

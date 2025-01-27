@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\ActivityItemGrade;
+use App\Models\project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -138,54 +139,61 @@ class ActivityController extends Controller
 
     public function assignGrades(Request $request, $id)
     {
-        // Validar los datos del formulario
         $validated = $request->validate([
             'id_user' => 'required|exists:users,id_user',
             'grades' => 'required|array',
             'grades.*' => 'nullable|numeric|min:0|max:10',
         ]);
 
-        // Convertir $id a entero
-        $id = (int) $id;
-
-        // Recuperar los valores
+        $id = (int)$id;
         $idUser = $validated['id_user'];
         $grades = $validated['grades'];
 
-        // Asegurarse de que las claves sean enteros y los valores sean flotantes
         $processedGrades = [];
         foreach ($grades as $idItem => $grade) {
-            $processedGrades[(int)$idItem] = (float)$grade;
+            if (!is_numeric($idItem)) {
+                return back()
+                    ->withErrors(['error' => 'Las claves de las calificaciones deben ser números válidos (id_item).'])
+                    ->withInput();
+            }
+
+            $processedGrades[(int)$idItem] = $grade !== null ? (float)$grade : null;
         }
 
-        // Crear o actualizar el registro en la tabla
         foreach ($processedGrades as $idItem => $grade) {
-            // Evitar procesar valores nulos
+            $existingGrade = ActivityItemGrade::where([
+                ['id_activity', '=', $id],
+                ['id_user', '=', $idUser],
+                ['id_item', '=', $idItem],
+            ])->first();
+
+            if ($existingGrade) {
+                return back()
+                    ->withErrors(['error' => 'Ya existe una nota registrada para el ítem ' . $idItem . ' en ese alumno e item. No se puede sobrescribir.'])
+                    ->withInput();
+            }
+        }
+
+        foreach ($processedGrades as $idItem => $grade) {
             if ($grade === null) {
                 continue;
             }
 
-            // Insertar o actualizar en la tabla activity_item_grades
-            ActivityItemGrade::updateOrCreate(
-                [
-                    'id_activity' => $id,
-                    'id_user' => $idUser,
-                    'id_item' => $idItem,
-                ],
-                [
-                    'grade' => $grade,
-                ]
-            );
+            ActivityItemGrade::create([
+                'id_activity' => $id,
+                'id_user' => $idUser,
+                'id_item' => $idItem,
+                'grade' => $grade,
+            ]);
         }
 
-        // Redirigir con un mensaje de éxito
         return redirect()->route('activities.grade', $id)
             ->with('success', 'Las notas se han asignado correctamente.');
     }
 
+
     public function activityStats($activityId)
     {
-        // Obtener la actividad con los ítems asignados
         $activity = Activity::with(['items'])->findOrFail($activityId);
         $userId = auth()->user()->id_user;
         $project = Project::find($activity->id_project);
@@ -201,19 +209,17 @@ class ActivityController extends Controller
 
             $activityAverage = 0;
         }else{
-            $totalWeightedGrade = 0; // Acumulador de la nota ponderada
-            $totalPercentage = 0; // Acumulador de los porcentajes totales
+            $totalWeightedGrade = 0;
+            $totalPercentage = 0;
 
             $stats = $activity->items->map(function ($item) use ($activity, $userId, &$totalWeightedGrade, &$totalPercentage) {
-                // Obtener la nota del ítem para el usuario actual en esta actividad
                 $grade = ActivityItemGrade::where('id_item', $item->id_item)
                     ->where('id_activity', $activity->id_activity)
                     ->where('id_user', $userId)
-                    ->value('grade');  // Obtiene la única nota asociada
+                    ->value('grade');
 
-                // Si se encontró la nota, ponderar según el porcentaje del ítem
                 if ($grade !== null) {
-                    $percentage = $item->pivot->percentage; // % del ítem
+                    $percentage = $item->pivot->percentage;
                     $totalWeightedGrade += ($grade * $percentage / 100);
                     $totalPercentage += $percentage;
                 }
@@ -225,7 +231,6 @@ class ActivityController extends Controller
                 ];
             });
 
-            // Calcular la nota media de la actividad (ponderada)
             $activityAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
 
         }

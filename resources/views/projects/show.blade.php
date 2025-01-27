@@ -62,8 +62,13 @@
                 <form action="/project/{{ $project->id_project }}/publicarNotas" method="POST">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="stats-button">Publicar Notes
-                    </button>
+                    @if($project->state == 0)
+                        <button type="submit" class="stats-button">Publicar Notes
+                        </button>
+                    @else
+                        <button type="submit" class="stats-button">Amagar Notes
+                        </button>
+                    @endif
                 </form>
             @else
                 <a href="{{ route('project.stats', $project->id_project) }}">

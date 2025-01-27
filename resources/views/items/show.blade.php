@@ -54,8 +54,9 @@
             <div class="activity">
                 <p><strong>Título: </strong>{{$item->title}}</p>
                 <p><strong>Descripción: </strong>{{$item->description}}</p>
-                <img src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->icon }}">
+                <img class="activity-img" src="{{ asset('storage/' . $item->icon) }}" alt="Icono de {{ $item->icon }}">
             </div>
+
         </div>
 
 

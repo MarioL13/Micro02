@@ -94,7 +94,7 @@
 
         <!-- Return Button -->
         <div class="save-button">
-            <a href="{{ route('projects.index') }}">
+            <a href="{{ route('projects.show', $project->id_project) }}">
                 <button class="save-button">Tornar</button>
             </a>
         </div>

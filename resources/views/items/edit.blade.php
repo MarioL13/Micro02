@@ -71,7 +71,7 @@
             </div>
 
             <div>
-                <button type="submit" class="stats-button-edit">Editar Projecte</button>
+                <button type="submit" class="stats-button-edit">Editar Item</button>
             </div>
         </form>
 

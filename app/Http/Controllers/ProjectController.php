@@ -180,7 +180,6 @@ class ProjectController extends Controller
         $project = Project::with(['activities', 'items'])->findOrFail($projectId);
         $userId = auth()->user()->id_user;
 
-        // Verificar si el estado del proyecto es 0
         if ($project->state == 0) {
             $stats = $project->items->map(function ($item) {
                 return [
@@ -190,22 +189,19 @@ class ProjectController extends Controller
                 ];
             });
 
-            $projectAverage = 0; // La nota promedio del proyecto es 0
+            $projectAverage = 0;
         } else {
-            $totalWeightedGrade = 0; // Acumulador de la nota ponderada
-            $totalPercentage = 0; // Acumulador de los porcentajes totales
+            $totalWeightedGrade = 0;
+            $totalPercentage = 0;
 
             $stats = $project->items->map(function ($item) use ($project, $userId, &$totalWeightedGrade, &$totalPercentage) {
-                // Obtener las actividades relacionadas al proyecto y al ítem actual
                 $activityIds = $project->activities->pluck('id_activity');
 
-                // Calcular la nota media para este ítem
                 $averageGrade = ActivityItemGrade::where('id_item', $item->id_item)
                     ->whereIn('id_activity', $activityIds)
                     ->where('id_user', $userId)
                     ->avg('grade');
 
-                // Calcular la nota ponderada (si hay una nota válida)
                 if ($averageGrade !== null) {
                     $percentage = $item->pivot->percentage; // % del ítem
                     $totalWeightedGrade += ($averageGrade * $percentage / 100);
@@ -219,19 +215,20 @@ class ProjectController extends Controller
                 ];
             });
 
-            // Calcular la nota media del proyecto (ponderada)
             $projectAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
         }
 
         return view('projects.stats', compact('project', 'stats', 'projectAverage'));
     }
-
-
     public function publicarNotas($projectId)
     {
         $project = Project::findOrFail($projectId);
 
-        $project->state = '1';
+        if ($project->state == '1'){
+            $project->state = '0';
+        }else{
+            $project->state = '1';
+        }
 
         $project->save();
 
