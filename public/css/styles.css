@@ -155,6 +155,7 @@ body {
     background-color: #CBDCEB;
 }
 
+
 /* Evaluation Items */
 .evaluation-items {
     display: flex;
@@ -184,6 +185,7 @@ body {
     padding: 25px;
     max-height: 500px; /* Ajusta esta altura según tus necesidades */
     overflow-y: auto;
+    margin-bottom: 10px;
 }
 
 .activities h2 {
@@ -207,7 +209,7 @@ body {
   padding: 35px;
 }
 
-.activity a, p{
+.activity a, p, label{
     text-decoration: none;
     color: #133E87;
 }
@@ -464,5 +466,12 @@ body {
 .stats-table td:nth-child(2), .stats-table td:nth-child(3) {
     text-align: center;
 }
+
+.error-message{
+    color: red;
+}
+
+
+
 
 

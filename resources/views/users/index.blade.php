@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuaris - StudyXP</title>
+    <title>Alumnes - StudyXP</title>
     <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -50,23 +50,13 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="header-content">
-            <h2>Usuaris</h2>
-            <a href="{{ route('welcome') }}"><button class="stats-button">Volver</button></a>
-
+            <h2>Alumnes</h2>
             <a href="/users/create"><button class="stats-button">Crear Usuari</button></a>
-            <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div>
-                    <label for="csv_file">Archivo CSV:</label>
-                    <input type="file" name="csv_file" id="csv_file" required>
-                </div>
-                <button type="submit">Importar Usuarios</button>
-            </form>
         </div>
 
         <div class="activities">
-            <h2>Usuaris Actius</h2>
-            <div class="activities">
+            <h2>Alumnes Actius</h2>
+            <div class="activities-list">
                 @foreach($users as $user)
                     @if($user->state == 1 && $user->is_profesor != 1)
                         <div class="activity">
@@ -87,40 +77,48 @@
                 @endforeach
             </div>
 
-            <h2>Usuaris Desactivats</h2>
+            <h2>Alumnes Desactivats</h2>
             <div class="activities-list">
                 @foreach($users as $user)
                     @if($user->state == 0 && $user->is_profesor != 1)
                         <div class="activity">
-                            <div class="activity">
-                                <img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
-                                <div>
-                                    <p><strong>Nom:</strong> {{ $user->name }}</p>
-                                    <p><strong>Cognom:</strong> {{ $user->surname }}</p>
-                                    <p><strong>Email:</strong> {{ $user->email }}</p>
-                                    <p><strong>DNI:</strong> {{ $user->dni }}</p>
-                                </div>
+                            <div class="activity-info">
+                                    <p> {{ $user->name }}</p>
                             </div>
                             <div class="activity-actions">
-                                <a href="/users/{{ $user->id_user }}">Veure Detalls</a>
+                                <a href="/users/{{ $user->id_user }}"><button class="stats-button">Veure Detalls</button></a>
 
                                 <!-- Formulario para activar el usuario -->
                                 <form action="/user/{{ $user->id_user }}/state" method="POST" style="display:inline;">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit">Activar</button>
+                                    <button type="submit" class="stats-button">Activar</button>
                                 </form>
 
                                 <form action="/users/{{ $user->id_user }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit">Eliminar</button>
+                                    <button type="submit" class="stats-button">Eliminar</button>
                                 </form>
                             </div>
                         </div>
                     @endif
                 @endforeach
             </div>
+        </div>
+        <div class="activities">
+            <h2>Importar Alumnes</h2>
+            <div>
+                <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="activity">
+                        <label for="csv_file">Archivo CSV:</label>
+                        <input type="file" name="csv_file" id="csv_file" required>
+                        <button type="submit" class="stats-button">Importar Alumnes</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
 
         <div class="save-button">
