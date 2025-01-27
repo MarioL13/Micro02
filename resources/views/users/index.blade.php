@@ -71,11 +71,7 @@
                     @if($user->state == 1 && $user->is_profesor != 1)
                         <div class="activity">
                             <div class="activity-info">
-                                <img height="100px" src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
-                                <p><strong>Nom:</strong> {{ $user->name }}</p>
-                                <p><strong>Cognom:</strong> {{ $user->surname }}</p>
-                                <p><strong>Email:</strong> {{ $user->email }}</p>
-                                <p><strong>DNI:</strong> {{ $user->dni }}</p>
+                                <p> {{ $user->name }}</p>
                             </div>
                             <div class="activity-actions">
                                 <a href="/users/{{ $user->id_user }}" ><button class="stats-button">Veure Detalls</button></a>

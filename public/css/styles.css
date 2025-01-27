@@ -412,3 +412,57 @@ body {
 .underline:hover{
     text-decoration: underline !important;
 }
+
+.hola{
+    color:white;
+}
+
+/* Estilos para la tabla */
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+/* Estilo para el encabezado */
+.stats-table thead tr {
+    background-color: #133E87; /* Azul oscuro */
+    color: #F3F3E0; /* Crema */
+    font-weight: bold;
+}
+
+.stats-table th, .stats-table td {
+    padding: 12px 15px;
+    border: 1px solid #CBDCEB; /* Azul claro */
+}
+
+/* Estilo para las filas pares */
+.stats-table tbody tr:nth-child(even) {
+    background-color: #CBDCEB; /* Azul claro */
+}
+
+/* Estilo para las filas impares */
+.stats-table tbody tr:nth-child(odd) {
+    background-color: #F3F3E0; /* Crema */
+}
+
+/* Hover: Resaltar fila al pasar el ratón */
+.stats-table tbody tr:hover {
+    background-color: #608BC1; /* Azul intermedio */
+    color: #F3F3E0; /* Texto claro en hover */
+    cursor: pointer;
+}
+
+/* Estilo general para las celdas */
+.stats-table td {
+    color: #133E87; /* Azul oscuro */
+}
+
+/* Opcional: Centrando las columnas específicas */
+.stats-table td:nth-child(2), .stats-table td:nth-child(3) {
+    text-align: center;
+}
+
+
