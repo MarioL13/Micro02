@@ -113,7 +113,9 @@ class ProjectController extends Controller
     public function alumnos($id)
     {
         $project = Project::findOrFail($id);
-        $users = User::where('is_profesor', '0')->get();
+        $users = User::where('is_profesor', '0')
+            ->where('state', '1')
+            ->get();
         $assignedUsers = $project->users->pluck('id_user')->toArray();
 
         return view('projects.veralumnos', compact('project', 'users', 'assignedUsers'));
