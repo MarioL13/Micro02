@@ -188,34 +188,47 @@ class ActivityController extends Controller
         // Obtener la actividad con los ítems asignados
         $activity = Activity::with(['items'])->findOrFail($activityId);
         $userId = auth()->user()->id_user;
+        $project = Project::find($activity->id_project);
 
-        $totalWeightedGrade = 0; // Acumulador de la nota ponderada
-        $totalPercentage = 0; // Acumulador de los porcentajes totales
+        if ($project->state == 0) {
+            $stats = $project->items->map(function ($item) {
+                return [
+                    'item' => $item->title,
+                    'averageGrade' => 0,
+                    'percentage' => $item->pivot->percentage,
+                ];
+            });
 
-        $stats = $activity->items->map(function ($item) use ($activity, $userId, &$totalWeightedGrade, &$totalPercentage) {
-            // Obtener la nota del ítem para el usuario actual en esta actividad
-            $grade = ActivityItemGrade::where('id_item', $item->id_item)
-                ->where('id_activity', $activity->id_activity)
-                ->where('id_user', $userId)
-                ->value('grade');  // Obtiene la única nota asociada
+            $activityAverage = 0;
+        }else{
+            $totalWeightedGrade = 0; // Acumulador de la nota ponderada
+            $totalPercentage = 0; // Acumulador de los porcentajes totales
 
-            // Si se encontró la nota, ponderar según el porcentaje del ítem
-            if ($grade !== null) {
-                $percentage = $item->pivot->percentage; // % del ítem
-                $totalWeightedGrade += ($grade * $percentage / 100);
-                $totalPercentage += $percentage;
-            }
+            $stats = $activity->items->map(function ($item) use ($activity, $userId, &$totalWeightedGrade, &$totalPercentage) {
+                // Obtener la nota del ítem para el usuario actual en esta actividad
+                $grade = ActivityItemGrade::where('id_item', $item->id_item)
+                    ->where('id_activity', $activity->id_activity)
+                    ->where('id_user', $userId)
+                    ->value('grade');  // Obtiene la única nota asociada
 
-            return [
-                'item' => $item->title,
-                'grade' => $grade !== null ? round($grade, 2) : null,
-                'percentage' => $item->pivot->percentage,
-            ];
-        });
+                // Si se encontró la nota, ponderar según el porcentaje del ítem
+                if ($grade !== null) {
+                    $percentage = $item->pivot->percentage; // % del ítem
+                    $totalWeightedGrade += ($grade * $percentage / 100);
+                    $totalPercentage += $percentage;
+                }
 
-        // Calcular la nota media de la actividad (ponderada)
-        $activityAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
+                return [
+                    'item' => $item->title,
+                    'grade' => $grade !== null ? round($grade, 2) : null,
+                    'percentage' => $item->pivot->percentage,
+                ];
+            });
 
+            // Calcular la nota media de la actividad (ponderada)
+            $activityAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
+
+        }
         return view('activities.stats', compact('activity', 'stats', 'activityAverage'));
     }
 

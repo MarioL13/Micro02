@@ -243,4 +243,39 @@ class UserController extends Controller
             return back()->withErrors(['error' => 'Hubo un error al procesar el archivo: ' . $e->getMessage()]);
         }
     }
+
+    public function updatePhoto(Request $request, $id)
+    {
+        // Validar que el usuario sea el mismo que el autenticado
+        if (auth()->id() != $id) {
+            abort(403, 'No estás autorizado para realizar esta acción.');
+        }
+
+        // Validar que se haya enviado una imagen válida
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        try {
+            $user = User::findOrFail($id);
+
+            // Subir la nueva imagen
+            if ($request->hasFile('foto')) {
+                $fotoPath = $request->file('foto')->store('photos', 'public');
+
+                // Eliminar la foto anterior si existe
+                if ($user->image) {
+                    \Storage::disk('public')->delete($user->image);
+                }
+
+                $user->image = $fotoPath;
+                $user->save();
+            }
+
+            return redirect()->route('users.show', $user->id_user)->with('success', 'Foto de perfil actualizada correctamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Hubo un error al actualizar la foto: ' . $e->getMessage()]);
+        }
+    }
+
 }

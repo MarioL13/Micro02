@@ -13,8 +13,13 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="profile">
-            <div class="avatar"></div>
-            <p class="hola">Hola, {{auth()->user()->name}}</p>
+            @if(auth()->user()->image)
+                <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+            @else
+                <div class="avatar"></div>
+            @endif
+
+            <p class="hola">Hola, {{ auth()->user()->name }}</p>
         </div>
         <div class="logo">
             <img src="{{asset('css/logo.png')}}" alt="StudyXP Logo">
@@ -57,9 +62,22 @@
                 </div>
                 <div class="right-section">
                     <h2>Imatge Perfil</h2>
-                    <div class="profile-image">
-                        <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de {{ $user->name }}">
+                    <div class="profile">
+                        @if(auth()->user()->image)
+                            <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+                        @else
+                            <div class="avatar"></div>
+                        @endif
                     </div>
+                    @if (auth()->user()->id_user == $user->id_user)
+                        <form action="{{ route('users.updatePhoto', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <label for="foto">Seleccionar nueva foto:</label>
+                            <input type="file" name="foto" id="foto" accept="image/*" required>
+                            <button type="submit" class="stats-button">Actualizar foto</button>
+                        </form>
+                    @endif
                 </div>
             </div>
             <div class="save-button">
