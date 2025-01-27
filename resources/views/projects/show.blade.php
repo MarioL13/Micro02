@@ -109,7 +109,7 @@
                             <a>{{ $activity->description }}</a>
                         <div class="activity-actions">
                             @if(auth()->user()->is_profesor == 1)
-                            <a {{ route('activities.edit', $activity->id_activity) }}"><button class="stats-button">Editar</button></a>
+                                <a href="{{ route('activities.edit', $activity->id_activity) }}"><button class="stats-button">Editar</button></a>
                             <form action="{{ route('activities.destroy', $activity->id_activity) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
