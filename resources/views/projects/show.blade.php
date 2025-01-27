@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activitat Informació - StudyXP</title>
+    <title>Projecte Informació - StudyXP</title>
     <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -79,8 +79,8 @@
             </div>
         </section>
 
-        <!-- Informació Activitat -->
-        <h2>Informació Activitat</h2>
+        <!-- Informació Projecte -->
+        <h2>Informació Projecte</h2>
         <section class="activities info-act">
             <p><strong>Títol: </strong>{{ $project->title }}</p>
             <p><strong>Descripció: </strong>{{ $project->description }}</p>

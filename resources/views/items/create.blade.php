@@ -1,52 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Items</title>
+    <link rel="icon" href="{{ asset('css/logo.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Crear Usuario</title>
-</head>
-<body>
-<h1>Crear Usuario</h1>
-<button><a href="{{ route('items.index') }}">Volver</a></button>
-<form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="{{ old('title') }}" required>
-    </div>
-    <div>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required>{{ old('description') }}</textarea>
-    </div>
-    <label for="foto">Foto:</label>
-    <input type="file" name="foto" id="foto">
-    <div>
-        <button type="submit">Create Project</button>
-    </div>
-</form>
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-</body>
-</html>
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="profile">
+            @if(auth()->user()->image)
+                <img class="avatar" src="{{ asset('storage/' . auth()->user()->image) }}" alt="Icono de {{ auth()->user()->name }}">
+            @else
+                <div class="avatar"></div>
+            @endif
+            <p class="hola">Hola, {{auth()->user()->name}}</p>
+        </div>
+        <div class="logo">
+            <img src="{{asset('css/logo.png')}}" alt="StudyXP Logo">
+        </div>
+        <nav class="bottom-menu">
+            <ul>
+                @if(auth()->user()->is_profesor == 0)
+                    <li>
+                        <i class='bx bxs-user'></i>
+                        <a href="/users/{{ auth()->user()->id_user }}"><button class="stats-button" type="submit">Les meves dades</button></a>
+                    </li>
+                @endif
+                <li>
+                    <i class='bx bx-log-out'></i>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="stats-button" type="submit">Tancar sessió</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header-content">
+            <h2>Crear Nou Item</h2>
+        </div>
+
+        <form action="{{ route('items.store') }}" method="POST" class="activities info-act" enctype="multipart/form-data">
+            @csrf
+
+            <div>
+                <label for="title">Títol:</label>
+                <input type="text" id="title" name="title" value="{{ old('title') }}" required class="rounded-input">
+            </div>
+
+            <div>
+                <label for="description">Descripció:</label>
+                <textarea id="description" name="description" required class="rounded-input">{{ old('description') }}</textarea>
+            </div>
+
+            <div>
+                <label for="foto">Icono:</label>
+                <input type="file" name="foto" id="foto" class="rounded-input">
+            </div>
+
+            <div >
+                <button type="submit" class="stats-button-edit">Crear Item</button>
+            </div>
+        </form>
+
+        <div class="save-button">
+            <a href="{{ route('items.index') }}">
+                <button class="save-button">Tornar</button>
+            </a>
+        </div>
+
+        <!-- Display Errors if Any -->
+        @if ($errors->any())
+            <div class="error-message">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </main>
+</div>
 </body>
 </html>

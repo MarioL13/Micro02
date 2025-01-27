@@ -63,6 +63,12 @@
                 </div>
             @endforeach
         </div>
+
+        <div class="save-button">
+            <a href="{{ route('projects.index') }}">
+                <button class="save-button">Tornar</button>
+            </a>
+        </div>
     </main>
 </div>
 </body>

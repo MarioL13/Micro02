@@ -13,7 +13,7 @@
     <aside class="sidebar">
         <div class="profile">
             <div class="avatar"></div>
-            <p>Hola, {{auth()->user()->name}}</p>
+            <p class="hola">Hola, {{auth()->user()->name}}</p>
         </div>
         <div class="logo">
             <img src="{{asset('css/logo.png')}}" alt="StudyXP Logo">
