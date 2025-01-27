@@ -16,9 +16,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->is_profesor == 0){
+        if (Auth::user()->is_profesor == 0) {
             $projects = Auth::user()->projects;
-        }else{
+        } else {
             $projects = Project::all();
         }
 
@@ -42,6 +42,7 @@ class ProjectController extends Controller
             $project->description = $validatedData['description'];
             $project->limit_date = $validatedData['limit_date'];
             $project->creation_date = now();
+            $project->state = 0;
             $project->save();
 
             return redirect()->route('projects.show', $project->id_project)->with('success', 'Proyecto creado correctamente.');
@@ -137,6 +138,7 @@ class ProjectController extends Controller
 
         abort(404);
     }
+
     public function items($id)
     {
         $project = Project::findOrFail($id);
@@ -178,36 +180,61 @@ class ProjectController extends Controller
         $project = Project::with(['activities', 'items'])->findOrFail($projectId);
         $userId = auth()->user()->id_user;
 
-        $totalWeightedGrade = 0; // Acumulador de la nota ponderada
-        $totalPercentage = 0; // Acumulador de los porcentajes totales
+        // Verificar si el estado del proyecto es 0
+        if ($project->state == 0) {
+            $stats = $project->items->map(function ($item) {
+                return [
+                    'item' => $item->title,
+                    'averageGrade' => 0,
+                    'percentage' => $item->pivot->percentage,
+                ];
+            });
 
-        $stats = $project->items->map(function ($item) use ($project, $userId, &$totalWeightedGrade, &$totalPercentage) {
-            // Obtener las actividades relacionadas al proyecto y al ítem actual
-            $activityIds = $project->activities->pluck('id_activity');
+            $projectAverage = 0; // La nota promedio del proyecto es 0
+        } else {
+            $totalWeightedGrade = 0; // Acumulador de la nota ponderada
+            $totalPercentage = 0; // Acumulador de los porcentajes totales
 
-            // Calcular la nota media para este ítem
-            $averageGrade = ActivityItemGrade::where('id_item', $item->id_item)
-                ->whereIn('id_activity', $activityIds)
-                ->where('id_user', $userId)
-                ->avg('grade');
+            $stats = $project->items->map(function ($item) use ($project, $userId, &$totalWeightedGrade, &$totalPercentage) {
+                // Obtener las actividades relacionadas al proyecto y al ítem actual
+                $activityIds = $project->activities->pluck('id_activity');
 
-            // Calcular la nota ponderada (si hay una nota válida)
-            if ($averageGrade !== null) {
-                $percentage = $item->pivot->percentage; // % del ítem
-                $totalWeightedGrade += ($averageGrade * $percentage / 100);
-                $totalPercentage += $percentage;
-            }
+                // Calcular la nota media para este ítem
+                $averageGrade = ActivityItemGrade::where('id_item', $item->id_item)
+                    ->whereIn('id_activity', $activityIds)
+                    ->where('id_user', $userId)
+                    ->avg('grade');
 
-            return [
-                'item' => $item->title,
-                'averageGrade' => $averageGrade !== null ? round($averageGrade, 2) : null,
-                'percentage' => $item->pivot->percentage,
-            ];
-        });
+                // Calcular la nota ponderada (si hay una nota válida)
+                if ($averageGrade !== null) {
+                    $percentage = $item->pivot->percentage; // % del ítem
+                    $totalWeightedGrade += ($averageGrade * $percentage / 100);
+                    $totalPercentage += $percentage;
+                }
 
-        // Calcular la nota media del proyecto (ponderada)
-        $projectAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
+                return [
+                    'item' => $item->title,
+                    'averageGrade' => $averageGrade !== null ? round($averageGrade, 2) : null,
+                    'percentage' => $item->pivot->percentage,
+                ];
+            });
+
+            // Calcular la nota media del proyecto (ponderada)
+            $projectAverage = $totalPercentage > 0 ? round($totalWeightedGrade, 2) : null;
+        }
 
         return view('projects.stats', compact('project', 'stats', 'projectAverage'));
+    }
+
+
+    public function publicarNotas($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+
+        $project->state = '1';
+
+        $project->save();
+
+        return view('projects.show', compact('project'));
     }
 }

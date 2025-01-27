@@ -19,13 +19,14 @@ CREATE TABLE users (
                        creation_date   DATE
 );
 
--- Tabla de proyectos
+-- Tabla de proyectos (añadiendo la columna state como BOOLEAN)
 CREATE TABLE projects (
                           id_project      INT AUTO_INCREMENT PRIMARY KEY,
                           title           VARCHAR(50),
                           description     VARCHAR(300),
                           creation_date   DATE,
-                          limit_date      DATE
+                          limit_date      DATE,
+                          state           TINYINT(1) DEFAULT 1 -- 1 = activo, 0 = inactivo
 );
 
 -- Tabla de actividades
@@ -45,7 +46,7 @@ CREATE TABLE items (
                        id_item         INT AUTO_INCREMENT PRIMARY KEY,
                        title           VARCHAR(50),
                        description     VARCHAR(200),
-                       icon            VARCHAR(20)
+                       icon            VARCHAR(200)
 );
 
 -- Tabla intermedia usuarios-proyectos (con rol y nota)
@@ -92,67 +93,7 @@ CREATE TABLE activity_item_grades (
                                       FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
--- Inserts en la tabla de usuarios
+-- Insert de un usuario profesor
 INSERT INTO users (name, surname, email, password, birthdate, state, dni, is_profesor, image, creation_date)
 VALUES
-    ('Juan', 'Pérez', 'juan.perez@example.com', 'password123', '2000-05-15', 1, '12345678A', 0, 'juan.jpg', '2024-12-05'),
-    ('Ana', 'López', 'ana.lopez@example.com', 'password456', '1999-08-20', 1, '87654321B', 0, 'ana.jpg', '2024-12-05'),
-    ('Luis', 'Martínez', 'luis.martinez@example.com', 'password789', '2001-02-10', 1, '11223344C', 0, 'luis.jpg', '2024-12-05');
-
--- Inserts en la tabla de proyectos
-INSERT INTO projects (title, description, creation_date, limit_date)
-VALUES
-    ('Proyecto Innovador', 'Un proyecto sobre innovación tecnológica.', '2024-12-01', '2025-01-15'),
-    ('Proyecto Sostenible', 'Proyecto enfocado en la sostenibilidad ambiental.', '2024-12-02', '2025-01-20');
-
--- Inserts en la tabla de actividades
-INSERT INTO activities (id_project, title, state, creation_date, limit_date, description)
-VALUES
-    (1, 'Investigar Innovaciones', 1, '2024-12-03', '2024-12-10', 'Actividad para investigar innovaciones recientes.'),
-    (1, 'Desarrollar Prototipo', 0, '2024-12-04', '2024-12-15', 'Crear un prototipo basado en la investigación.'),
-    (2, 'Análisis Ambiental', 1, '2024-12-05', '2024-12-12', 'Evaluar impactos ambientales de proyectos similares.');
-
--- Inserts en la tabla de ítems
-INSERT INTO items (title, description, icon)
-VALUES
-    ('Documentación', 'Crear y organizar documentos.', 'doc-icon'),
-    ('Investigación', 'Buscar información relevante.', 'search-icon'),
-    ('Desarrollo', 'Implementar soluciones técnicas.', 'code-icon'),
-    ('Presentación', 'Preparar diapositivas y exposiciones.', 'presentation-icon');
-
--- Inserts en la tabla user_projects
-INSERT INTO user_projects (id_user, id_project, grade)
-VALUES
-    (1, 1, NULL), -- Juan participa en el Proyecto Innovador
-    (2, 1, NULL), -- Ana participa en el Proyecto Innovador
-    (3, 2, NULL), -- Luis participa en el Proyecto Sostenible
-    (3, 1, NULL); -- Luis participa en el Proyecto Innovador
-
--- Inserts en la tabla activity_items
-INSERT INTO activity_items (id_activity, id_item, percentage, grade)
-VALUES
-    (1, 1, 50, NULL), -- Documentación vale 50% en la actividad de Investigar Innovaciones
-    (1, 2, 50, NULL), -- Investigación vale 50% en la actividad de Investigar Innovaciones
-    (2, 3, 100, NULL), -- Desarrollo vale 100% en la actividad de Desarrollar Prototipo
-    (3, 4, 100, NULL); -- Presentación vale 100% en la actividad de Análisis Ambiental
-
--- Inserts en la tabla project_items
-INSERT INTO project_items (id_project, id_item, percentage, grade)
-VALUES
-    (1, 1, 40, NULL), -- Documentación vale 40% en el Proyecto Innovador
-    (1, 2, 60, NULL), -- Investigación vale 60% en el Proyecto Innovador
-    (2, 3, 50, NULL), -- Desarrollo vale 50% en el Proyecto Sostenible
-    (2, 4, 50, NULL); -- Presentación vale 50% en el Proyecto Sostenible
-
--- Inserts en la tabla activity_item_grades
-INSERT INTO activity_item_grades (id_activity, id_item, id_user, grade)
-VALUES
-    (1, 1, 1, 8.5), -- Juan, ítem "Documentación" en la actividad 1
-    (1, 2, 1, 9.0), -- Juan, ítem "Investigación" en la actividad 1
-    (1, 1, 2, 7.0), -- Ana, ítem "Documentación" en la actividad 1
-    (1, 2, 2, 8.0), -- Ana, ítem "Investigación" en la actividad 1
-    (1, 1, 3, 6.5), -- Luis, ítem "Documentación" en la actividad 1
-    (1, 2, 3, 7.5); -- Luis, ítem "Investigación" en la actividad 1
-
--- Consulta para verificar las tablas creadas
-SHOW TABLES;
+    ('Profesor', 'Demo', 'p@p.com', '$2y$12$e7y7l3ik9nRqxucBHbJh8eo80rYAn89R7LexEf8PKBSca0c7HErsi', NULL, 1, NULL, 1, NULL, CURDATE());
