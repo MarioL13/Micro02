@@ -19,7 +19,7 @@ class ActivityController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:255',
-            'limit_date' => 'required|date',
+            'limit_date' => 'required|date|after_or_equal:today',
             'id_project' => 'required|exists:projects,id_project',
         ]);
 
@@ -54,7 +54,7 @@ class ActivityController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:255',
-            'limit_date' => 'required|date'
+            'limit_date' => 'required|date|after_or_equal:today',
         ]);
 
         $activity->update($validatedData);
