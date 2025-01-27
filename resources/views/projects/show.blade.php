@@ -59,6 +59,12 @@
                 <a href="{{ route('activities.create', $project->id_project) }}">
                     <button class="stats-button">Crear Activitat</button>
                 </a>
+                <form action="/project/{{ $project->id_project }}/publicarNotas" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="stats-button">Publicar Notas
+                    </button>
+                </form>
             @else
                 <a href="{{ route('project.stats', $project->id_project) }}">
                     <button class="stats-button">Estadistiques Projecte</button>

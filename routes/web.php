@@ -26,6 +26,7 @@ Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->middleware
 Route::get('/project/{id}/veritems', [ProjectController::class, 'items']);
 Route::post('/project/{id}/assign-items', [ProjectController::class, 'assignItems'])->middleware('auth');
 Route::get('/project/{id}/stats', [ProjectController::class, 'projectStats'])->name('project.stats');
+Route::patch('/project/{id}/publicarNotas', [ProjectController::class, 'publicarNotas'])->middleware('auth');
 
 Route::resource('items', ItemController::class)->middleware('auth');
 Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->middleware('auth');
