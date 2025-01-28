@@ -10,6 +10,10 @@
     height: 100vh;
 }
 
+.error-message {
+    color: red;
+}
+
 .login-container {
     background-color: #CBDCEB;
     width: 700px;

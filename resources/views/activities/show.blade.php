@@ -54,9 +54,11 @@
                 <button class="stats-button">Assignar Notes</button>
             </a>
             @endif
-            <a href="{{ route('activities.stats', $activity->id_activity) }}">
-                <button class="stats-button">Estadistiques Activitat</button>
-            </a>
+            @if(auth()->user()->is_profesor == 0)
+                <a href="{{ route('activities.stats', $activity->id_activity) }}">
+                    <button class="stats-button">Estadistiques Activitat</button>
+                </a>
+            @endif
         </div>
 
         <section class="activities info-act">
